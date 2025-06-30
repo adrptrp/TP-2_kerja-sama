@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Support - Cellular Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    .support-container { max-width: 700px; margin: 3rem auto; background: #fff; border-radius: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 2.5rem 2rem; }
+    .support-title { font-size: 2.2rem; font-weight: 800; color: #667eea; margin-bottom: 2rem; text-align: center; }
+    .faq-list { margin-bottom: 2.5rem; }
+    .faq-item { margin-bottom: 1.5rem; }
+    .faq-q { font-weight: 700; color: #333; margin-bottom: 0.3rem; }
+    .faq-a { color: #444; }
+    .support-contact { background: #f5f6fa; border-radius: 12px; padding: 1.2rem 1.5rem; text-align: center; }
+    .support-contact h3 { color: #667eea; margin-bottom: 0.5rem; }
+    .support-contact p { color: #333; }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__container">
+      <div class="header__logo">Cellular Hub</div>
+      <nav class="header__nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="support.html" class="active">Support</a>
+        <a href="cart.html">Cart</a>
+        <a href="#" onclick="checkLoginStatus()">My Account</a>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="support-container">
+      <div class="support-title">Support</div>
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q">Bagaimana cara memesan produk di Cellular Hub?</div>
+          <div class="faq-a">Pilih produk yang diinginkan, tambahkan ke keranjang, lalu lanjutkan ke checkout dan ikuti instruksi pembayaran.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Metode pembayaran apa saja yang tersedia?</div>
+          <div class="faq-a">Kami menerima transfer bank, kartu kredit/debit, bayar di tempat (COD), dan Cellular Hub Pay.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Bagaimana cara melacak pesanan saya?</div>
+          <div class="faq-a">Setelah pesanan dikonfirmasi, Anda akan menerima email dengan nomor resi dan link pelacakan.</div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q">Bagaimana jika saya butuh bantuan lebih lanjut?</div>
+          <div class="faq-a">Silakan hubungi tim support kami melalui kontak di bawah ini.</div>
+        </div>
+      </div>
+      <div class="support-contact">
+        <h3>Kontak Support</h3>
+        <p>Email: <a href="mailto:support@cellularhub.com">support@cellularhub.com</a></p>
+        <p>WhatsApp: <a href="https://wa.me/6281234567890">+62 812-3456-7890</a></p>
+        <p>Jam Operasional: 09.00 - 18.00 WIB (Senin - Sabtu)</p>
+      </div>
+    </div>
+  </main>
+  <script>
+    function checkLoginStatus() {
+      const storedUser = localStorage.getItem('userAccount');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (user.isAuthenticated) {
+          window.location.href = 'myaccount.html';
+        } else {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = 'myaccount.html?login=true';
+        }
+      } else {
+        alert('Your session has expired. Please log in again.');
+        window.location.href = 'myaccount.html?login=true';
+      }
+    }
+  </script>
+  <footer class="footer">
+    <div class="footer__links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer__copyright">
+      <div class="footer__socials">
+        <img src="assets/twitter.png" alt="Twitter">
+        <img src="assets/facebook.png" alt="Facebook">
+        <img src="assets/instagram.png" alt="Instagram">
+      </div>
+      <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+    </div>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - Cellular Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/shop.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header h1 {
+            color: #2d3748;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .header p {
+            color: #4a5568;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero-section h2 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-section p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-section h3 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            color: #4a5568;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-group select:focus, .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .phones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .phone-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .phone-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .phone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+
+        .phone-name {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .phone-price {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .phone-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .spec-item {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .spec-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .spec-value {
+            font-weight: 600;
+            color: #2d3748;
+            font-size: 0.95rem;
+        }
+
+        .phone-features {
+            background: #f7fafc;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .features-title {
+            font-size: 0.9rem;
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .feature-tag {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .budget { background: #e6fffa; color: #00695c; }
+        .mid-range { background: #fff3e0; color: #e65100; }
+        .flagship { background: #f3e5f5; color: #4a148c; }
+        .ultra-premium { background: #fce4ec; color: #880e4f; }
+        .gaming { background: #ffebee; color: #c62828; }
+
+        .search-section {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            padding: 15px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .phone-image {
+            width: 100%;
+            height: 200px;
+            background-color: #e2e8f0;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .phone-image img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        @media (max-width: 768px) {
+            .phones-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .filter-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero-section h2 {
+                font-size: 2rem;
+            }
+            
+            .phone-specs {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        .cart-icon img {
+            width: 24px;
+            height: 24px;
+            filter: invert(1);
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 6px;
+            font-size: 0.7rem;
+        }
+
+        .cart-dropdown {
+            display: none;
+            position: absolute;
+            top: 40px;
+            right: 0;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .cart-dropdown-item {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-dropdown-total {
+            padding: 10px;
+            font-weight: bold;
+            text-align: center;
+            background: #f7fafc;
+        }
+
+        .cart-dropdown-checkout {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .cart-dropdown-checkout button {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .quantity-selector button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid #e2e8f0;
+            color: #2d3748;
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .quantity-selector button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .buy-now-btn {
+            background: linear-gradient(135deg, #4ecdc4, #44a08d);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .add-to-cart-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .rating {
+            color: #f39c12;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__container">
+            <div class="header__logo" style="color: white;">Cellular Hub</div>
+            <nav class="header__nav">
+                <a href="index.html">Home</a>
+                <a href="shop.html" style="color: white;">Shop</a>
+                <a href="support.html">Support</a>
+                <div class="cart-icon" onclick="toggleCartDropdown()">
+                    <img src="assets/cart.png" alt="Cart">
+                    <span id="cartCount" class="cart-badge">0</span>
+                    <div id="cartDropdown" class="cart-dropdown">
+                        <!-- Cart items will be dynamically loaded here -->
+                    </div>
+                </div>
+                <a href="#" onclick="checkLoginStatus()" style="background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 8px;">My Account</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-section">
+            <h2>Discover the latest in mobile technology</h2>
+            <p>Explore the newest and best-in-class smartphones, featuring cutting-edge innovations and exclusive offers.</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalPhones">25</span>
+                    <span class="stat-label">Total Phones</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">8</span>
+                    <span class="stat-label">Brands</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">2025</span>
+                    <span class="stat-label">Latest Models</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h3>🔍 Filter & Search</h3>
+            
+            <div class="search-section">
+                <input type="text" class="search-input" id="searchInput" placeholder="Cari HP berdasarkan nama, merek, atau spesifikasi...">
+            </div>
+
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label>Kategori Harga</label>
+                    <select id="categoryFilter">
+                        <option value="">Semua Kategori</option>
+                        <option value="budget">Budget (1-3 Juta)</option>
+                        <option value="mid-range">Mid-Range (3-7 Juta)</option>
+                        <option value="flagship">Flagship (7-15 Juta)</option>
+                        <option value="ultra-premium">Ultra Premium (15+ Juta)</option>
+                        <option value="gaming">Gaming Specialist</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Merek</label>
+                    <select id="brandFilter">
+                        <option value="">Semua Merek</option>
+                        <option value="Xiaomi">Xiaomi</option>
+                        <option value="Samsung">Samsung</option>
+                        <option value="OPPO">OPPO</option>
+                        <option value="Vivo">Vivo</option>
+                        <option value="Realme">Realme</option>
+                        <option value="iPhone">iPhone</option>
+                        <option value="ASUS">ASUS</option>
+                        <option value="RedMagic">RedMagic</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>RAM Minimum</label>
+                    <select id="ramFilter">
+                        <option value="">Semua RAM</option>
+                        <option value="4">4GB+</option>
+                        <option value="6">6GB+</option>
+                        <option value="8">8GB+</option>
+                        <option value="12">12GB+</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label>Budget Maksimal</label>
+                    <input type="range" id="priceRange" min="1000000" max="25000000" step="500000" value="25000000">
+                    <span id="priceDisplay">Rp 25.000.000</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="phones-grid" id="phonesContainer">
+            <!-- Phones will be dynamically loaded here -->
+        </div>
+
+        <div class="filter-section" id="summaryCartSection" style="margin-top: 30px; display: none;">
+            <h3>🛒 Cart Summary</h3>
+            <div id="summaryCartContent" style="text-align: center; padding: 20px; color: #2d3748;">
+                <!-- Summary will be dynamically loaded here -->
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+                <button onclick="proceedToCheckout()" style="background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s ease;">Checkout Semua</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__links">
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <div class="footer__copyright">
+            <div class="footer__socials">
+                <img src="assets/twitter.png" alt="Twitter">
+                <img src="assets/facebook.png" alt="Facebook">
+                <img src="assets/instagram.png" alt="Instagram">
+            </div>
+            <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script src="js/shop.js"></script>
+    <script>
+    function checkLoginStatus() {
+      const storedUser = localStorage.getItem('userAccount');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (user.isAuthenticated) {
+          window.location.href = 'myaccount.html';
+        } else {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = 'myaccount.html?login=true';
+        }
+      } else {
+        alert('Your session has expired. Please log in again.');
+        window.location.href = 'myaccount.html?login=true';
+      }
+    }
+        // Database HP
+        const phonesDB = [
+            {
+                name: "Xiaomi Redmi 12C",
+                brand: "Xiaomi",
+                price: 1499000,
+                category: "budget",
+                chipset: "MediaTek Helio G85",
+                ram: 4,
+                storage: "64GB/128GB",
+                display: "6.71\" HD+ IPS LCD",
+                camera: "50MP + 0.08MP",
+                battery: "5000mAh, 18W",
+                os: "Android 12, MIUI 13",
+                connectivity: "4G LTE",
+                features: ["Fingerprint", "Fast Charging", "Dual Camera"],
+                image: "assets/xiaomi_redmi_12c.png",
+                rating: 4.2
+            },
+            {
+                name: "Samsung Galaxy A04s",
+                brand: "Samsung",
+                price: 2199000,
+                category: "budget",
+                chipset: "Exynos 850",
+                ram: 4,
+                storage: "64GB",
+                display: "6.5\" HD+ PLS LCD",
+                camera: "50MP + 2MP + 2MP",
+                battery: "5000mAh, 15W",
+                os: "Android 12, One UI 4.1",
+                connectivity: "4G LTE",
+                features: ["Triple Camera", "Long Battery", "One UI"],
+                image: "assets/samsung_galaxy_a04s.png",
+                rating: 4.0
+            },
+            {
+                name: "Realme C55",
+                brand: "Realme",
+                price: 2899000,
+                category: "budget",
+                chipset: "MediaTek Helio G88",
+                ram: 6,
+                storage: "128GB",
+                display: "6.72\" FHD+ IPS LCD, 90Hz",
+                camera: "64MP + 2MP",
+                battery: "5000mAh, 33W SuperVOOC",
+                os: "Android 13, realme UI 4.0",
+                connectivity: "4G LTE",
+                features: ["90Hz Display", "Fast Charging", "64MP Camera"],
+                image: "assets/realme_c55.png",
+                rating: 4.3
+            },
+            {
+                name: "Xiaomi Redmi Note 12 Pro",
+                brand: "Xiaomi",
+                price: 4699000,
+                category: "mid-range",
+                chipset: "MediaTek Dimensity 1080",
+                ram: 8,
+                storage: "256GB",
+                display: "6.67\" FHD+ AMOLED, 120Hz",
+                camera: "50MP + 8MP + 2MP",
+                battery: "5000mAh, 67W",
+                os: "Android 12, MIUI 14",
+                connectivity: "4G LTE",
+                features: ["AMOLED Display", "120Hz", "67W Fast Charging", "Triple Camera"],
+                image: "assets/xiaomi_redmi_note_12_pro.png",
+                rating: 4.5
+            },
+            {
+                name: "Samsung Galaxy A54 5G",
+                brand: "Samsung",
+                price: 5999000,
+                category: "mid-range",
+                chipset: "Exynos 1380",
+                ram: 8,
+                storage: "256GB",
+                display: "6.4\" FHD+ Super AMOLED, 120Hz",
+                camera: "50MP + 12MP + 5MP",
+                battery: "5000mAh, 25W",
+                os: "Android 13, One UI 5.1",
+                connectivity: "5G",
+                features: ["5G Ready", "Super AMOLED", "120Hz", "Premium Design"],
+                image: "assets/samsung_galaxy_a54_5g.png",
+                rating: 4.6
+            },
+            {
+                name: "OPPO Reno8 T",
+                brand: "OPPO",
+                price: 4499000,
+                category: "mid-range",
+                chipset: "MediaTek Helio G99",
+                ram: 8,
+                storage: "256GB",
+                display: "6.43\" FHD+ AMOLED, 90Hz",
+                camera: "100MP + 2MP + 2MP",
+                battery: "4800mAh, 67W SuperVOOC",
+                os: "Android 13, ColorOS 13.1",
+                connectivity: "4G LTE",
+                features: ["100MP Camera", "67W Charging", "Portrait Expert"],
+                image: "assets/oppo_reno8_t.png",
+                rating: 4.4
+            },
+            {
+                name: "Vivo V27e",
+                brand: "Vivo",
+                price: 4999000,
+                category: "mid-range",
+                chipset: "MediaTek Helio G99",
+                ram: 8,
+                storage: "256GB",
+                display: "6.62\" FHD+ AMOLED, 120Hz",
+                camera: "64MP + 2MP + 2MP",
+                battery: "4600mAh, 66W",
+                os: "Android 13, Funtouch OS 13",
+                connectivity: "4G LTE",
+                features: ["Selfie Expert", "Fast Charging", "Stylish Design"],
+                image: "assets/vivo_v27e.png",
+                rating: 4.3
+            },
+            {
+                name: "Xiaomi 13T Pro",
+                brand: "Xiaomi",
+                price: 9999000,
+                category: "flagship",
+                chipset: "MediaTek Dimensity 9200+",
+                ram: 12,
+                storage: "512GB",
+                display: "6.67\" FHD+ AMOLED, 144Hz, HDR10+",
+                camera: "50MP + 50MP + 12MP",
+                battery: "5000mAh, 120W HyperCharge",
+                os: "Android 13, MIUI 14",
+                connectivity: "5G",
+                features: ["144Hz Display", "120W Charging", "Flagship Camera", "5G Ready"],
+                image: "assets/xiaomi_13t_pro.png",
+                rating: 4.8
+            },
+            {
+                name: "Samsung Galaxy S23 FE",
+                brand: "Samsung",
+                price: 8999000,
+                category: "flagship",
+                chipset: "Exynos 2200",
+                ram: 8,
+                storage: "256GB",
+                display: "6.4\" FHD+ Dynamic AMOLED 2X, 120Hz",
+                camera: "50MP + 12MP + 8MP",
+                battery: "4500mAh, 25W + Wireless",
+                os: "Android 13, One UI 5.1",
+                connectivity: "5G",
+                features: ["Flagship Features", "Wireless Charging", "Premium Build"],
+                image: "assets/samsung_galaxy_s23_fe.png",
+                rating: 4.7
+            },
+            {
+                name: "iPhone 14",
+                brand: "iPhone",
+                price: 13999000,
+                category: "flagship",
+                chipset: "Apple A15 Bionic",
+                ram: 6,
+                storage: "128GB",
+                display: "6.1\" Super Retina XDR OLED",
+                camera: "12MP + 12MP",
+                battery: "3279mAh, 20W + MagSafe",
+                os: "iOS 16",
+                connectivity: "5G",
+                features: ["Face ID", "MagSafe", "Premium iOS", "A15 Bionic"],
+                image: "assets/iphone_14.png",
+                rating: 4.9
+            },
+            {
+                name: "Samsung Galaxy S24 Ultra",
+                brand: "Samsung",
+                price: 19999000,
+                category: "ultra-premium",
+                chipset: "Snapdragon 8 Gen 3",
+                ram: 12,
+                storage: "512GB",
+                display: "6.8\" QHD+ Dynamic AMOLED 2X, 120Hz",
+                camera: "200MP + 50MP + 10MP + 12MP",
+                battery: "5000mAh, 45W + Wireless",
+                os: "Android 14, One UI 6.1",
+                connectivity: "5G",
+                features: ["S Pen", "200MP Camera", "Ultra Premium", "AI Features"],
+                image: "assets/samsung_galaxy_s24_ultra.png",
+                rating: 4.9
+            },
+            {
+                name: "iPhone 15 Pro Max",
+                brand: "iPhone",
+                price: 21999000,
+                category: "ultra-premium",
+                chipset: "Apple A17 Pro",
+                ram: 8,
+                storage: "256GB",
+                display: "6.7\" Super Retina XDR OLED, 120Hz ProMotion",
+                camera: "48MP + 12MP + 12MP",
+                battery: "4441mAh, 27W + MagSafe",
+                os: "iOS 17",
+                connectivity: "5G",
+                features: ["A17 Pro", "ProMotion", "LiDAR", "Titanium Build"],
+                image: "assets/iphone_15_pro_max.png",
+                rating: 5.0
+            },
+            {
+                name: "ASUS ROG Phone 7",
+                brand: "ASUS",
+                price: 12999000,
+                category: "gaming",
+                chipset: "Snapdragon 8 Gen 2",
+                ram: 12,
+                storage: "256GB",
+                display: "6.78\" FHD+ AMOLED, 165Hz",
+                camera: "50MP + 13MP + 5MP",
+                battery: "6000mAh, 65W",
+                os: "Android 13, ROG UI",
+                connectivity: "5G",
+                features: ["165Hz Gaming", "AirTrigger", "GameCool", "ROG Ecosystem"],
+                image: "assets/asus_rog_phone_7.png",
+                rating: 4.7
+            },
+            {
+                name: "RedMagic 8 Pro",
+                brand: "RedMagic",
+                price: 9999000,
+                category: "gaming",
+                chipset: "Snapdragon 8 Gen 2",
+                ram: 12,
+                storage: "256GB",
+                display: "6.8\" FHD+ AMOLED, 120Hz",
+                camera: "50MP + 8MP + 2MP",
+                battery: "6000mAh, 65W",
+                os: "Android 13, RedMagic OS 6.0",
+                connectivity: "5G",
+                features: ["Gaming Beast", "Under Display Camera", "ICE Cooling", "RGB Lighting"],
+                image: "assets/redmagic_8_pro.png",
+                rating: 4.6
+            }
+        ];
+
+        let filteredPhones = [...phonesDB];
+
+        // Format currency
+        function formatPrice(price) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(price);
+        }
+
+        // Get category badge class
+        function getCategoryClass(category) {
+            return category;
+        }
+
+        // Get category display name
+        function getCategoryName(category) {
+            const names = {
+                'budget': 'Budget',
+                'mid-range': 'Mid-Range',
+                'flagship': 'Flagship',
+                'ultra-premium': 'Ultra Premium',
+                'gaming': 'Gaming'
+            };
+            return names[category] || category;
+        }
+
+        // Render phones
+        function renderPhones(phones) {
+            const container = document.getElementById('phonesContainer');
+            
+            if (phones.length === 0) {
+                container.innerHTML = '<div style="text-align: center; padding: 40px; color: #4a5568;"><h3>Tidak ada HP yang sesuai dengan filter Anda</h3></div>';
+                return;
+            }
+
+            container.innerHTML = phones.map(phone => `
+                <div class="phone-card">
+                    <div class="category-badge ${getCategoryClass(phone.category)}">
+                        ${getCategoryName(phone.category)}
+                    </div>
+                    
+                    <div class="phone-image">
+                        <img src="${phone.image}" alt="${phone.name}">
+                    </div>
+                    
+                    <div class="phone-header">
+                        <div class="phone-name">${phone.name}</div>
+                        <div class="phone-price">${formatPrice(phone.price)}</div>
+                    </div>
+                    <div class="rating">Rating: ${renderStars(phone.rating)}</div>
+                    
+                    <div class="phone-specs">
+                        <div class="spec-item">
+                            <div class="spec-label">Chipset</div>
+                            <div class="spec-value">${phone.chipset}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">RAM/Storage</div>
+                            <div class="spec-value">${phone.ram}GB / ${phone.storage}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Display</div>
+                            <div class="spec-value">${phone.display}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Camera</div>
+                            <div class="spec-value">${phone.camera}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Battery</div>
+                            <div class="spec-value">${phone.battery}</div>
+                        </div>
+                        <div class="spec-item">
+                            <div class="spec-label">Connectivity</div>
+                            <div class="spec-value">${phone.connectivity}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="phone-features">
+                        <div class="features-title">Fitur Unggulan:</div>
+                        <div class="features-list">
+                            ${phone.features.map(feature => `<span class="feature-tag">${feature}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div id="cart-controls-${phone.name.replace(/\s+/g, '-')}" style="display: ${isInCart(phone.name) ? 'block' : 'none'}">
+                        <div class="quantity-selector">
+                            <button onclick="updateQuantity('${phone.name}', ${getCartItemQuantity(phone.name) - 1})">-</button>
+                            <span>${getCartItemQuantity(phone.name)}</span>
+                            <button onclick="updateQuantity('${phone.name}', ${getCartItemQuantity(phone.name) + 1})">+</button>
+                        </div>
+                    </div>
+                    <button class="add-to-cart-btn" id="add-to-cart-${phone.name.replace(/\s+/g, '-')}" onclick="addToCart('${phone.name}', ${phone.price})" style="display: ${isInCart(phone.name) ? 'none' : 'block'}">Tambah ke Cart</button>
+                    <button class="buy-now-btn" onclick="buyNow('${phone.name}', ${phone.price})">Beli Sekarang</button>
+                </div>
+            `).join('');
+
+            // Update total phones count
+            document.getElementById('totalPhones').textContent = phones.length;
+        }
+
+        // Filter functions
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const categoryFilter = document.getElementById('categoryFilter').value;
+            const brandFilter = document.getElementById('brandFilter').value;
+            const ramFilter = parseInt(document.getElementById('ramFilter').value) || 0;
+            const maxPrice = parseInt(document.getElementById('priceRange').value);
+
+            filteredPhones = phonesDB.filter(phone => {
+                const matchesSearch = phone.name.toLowerCase().includes(searchTerm) ||
+                                    phone.brand.toLowerCase().includes(searchTerm) ||
+                                    phone.chipset.toLowerCase().includes(searchTerm) ||
+                                    phone.features.some(feature => feature.toLowerCase().includes(searchTerm));
+                
+                const matchesCategory = !categoryFilter || phone.category === categoryFilter;
+                const matchesBrand = !brandFilter || phone.brand === brandFilter;
+                const matchesRAM = phone.ram >= ramFilter;
+                const matchesPrice = phone.price <= maxPrice;
+
+                return matchesSearch && matchesCategory && matchesBrand && matchesRAM && matchesPrice;
+            });
+
+            renderPhones(filteredPhones);
+        }
+
+        // Update price display
+        function updatePriceDisplay() {
+            const priceRange = document.getElementById('priceRange');
+            const priceDisplay = document.getElementById('priceDisplay');
+            priceDisplay.textContent = formatPrice(parseInt(priceRange.value));
+        }
+
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+        document.getElementById('brandFilter').addEventListener('change', applyFilters);
+        document.getElementById('ramFilter').addEventListener('change', applyFilters);
+        document.getElementById('priceRange').addEventListener('input', function() {
+            updatePriceDisplay();
+            applyFilters();
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPhones(phonesDB);
+            updatePriceDisplay();
+            updateCartCount();
+            renderCartDropdown();
+            renderSummaryCart();
+        });
+
+        // Function to render stars for rating
+        function renderStars(rating) {
+            let stars = '';
+            for (let i = 0; i < 5; i++) {
+                if (i < Math.floor(rating)) {
+                    stars += '★';
+                } else {
+                    stars += '☆';
+                }
+            }
+            return stars;
+        }
+
+        // Function to add item to cart
+        function addToCart(name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`${name} telah ditambahkan ke keranjang!`);
+            updateCartCount();
+            renderCartDropdown();
+            renderSummaryCart();
+            updateCartControls(name);
+        }
+
+        // Function to buy now
+        function buyNow(name, price) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const existingItem = cart.find(item => item.name === name);
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name, price, quantity: 1 });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`Membeli ${name} sekarang! Anda akan diarahkan ke halaman pembayaran.`);
+            window.location.href = 'cart.html';
+        }
+
+        // Function to update cart count in navigation
+        function updateCartCount() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = totalItems;
+        }
+
+        // Function to update quantity of an item in cart
+        function updateQuantity(name, newQuantity) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (newQuantity < 1) {
+                cart = cart.filter(item => item.name !== name);
+                alert(`${name} telah dihapus dari keranjang!`);
+            } else {
+                const item = cart.find(item => item.name === name);
+                if (item) {
+                    item.quantity = newQuantity;
+                }
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            renderCartDropdown();
+            renderSummaryCart();
+            updateCartControls(name);
+        }
+
+        // Function to check if item is in cart
+        function isInCart(name) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            return cart.some(item => item.name === name);
+        }
+
+        // Function to get quantity of item in cart
+        function getCartItemQuantity(name) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const item = cart.find(item => item.name === name);
+            return item ? item.quantity : 0;
+        }
+
+        // Function to update cart controls visibility
+        function updateCartControls(name) {
+            const cartControls = document.getElementById(`cart-controls-${name.replace(/\s+/g, '-')}`);
+            const addToCartBtn = document.getElementById(`add-to-cart-${name.replace(/\s+/g, '-')}`);
+            if (cartControls && addToCartBtn) {
+                if (isInCart(name)) {
+                    cartControls.style.display = 'block';
+                    cartControls.innerHTML = `
+                        <div class="quantity-selector">
+                            <button onclick="updateQuantity('${name}', ${getCartItemQuantity(name) - 1})">-</button>
+                            <span>${getCartItemQuantity(name)}</span>
+                            <button onclick="updateQuantity('${name}', ${getCartItemQuantity(name) + 1})">+</button>
+                        </div>
+                    `;
+                    addToCartBtn.style.display = 'none';
+                } else {
+                    cartControls.style.display = 'none';
+                    addToCartBtn.style.display = 'block';
+                }
+            }
+        }
+
+        // Function to toggle cart dropdown
+        function toggleCartDropdown() {
+            const dropdown = document.getElementById('cartDropdown');
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+            } else {
+                renderCartDropdown();
+                dropdown.style.display = 'block';
+            }
+        }
+
+        // Function to render cart dropdown
+        function renderCartDropdown() {
+            const dropdown = document.getElementById('cartDropdown');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                dropdown.innerHTML = '<div style="padding: 10px; text-align: center; color: #4a5568;">Keranjang Anda kosong</div>';
+            } else {
+                let total = 0;
+                let itemsHTML = '';
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    itemsHTML += `
+                        <div class="cart-dropdown-item">
+                            <div>${item.name}</div>
+                            <div class="quantity-selector">
+                                <button onclick="updateQuantity('${item.name}', ${item.quantity - 1})">-</button>
+                                <span>${item.quantity}</span>
+                                <button onclick="updateQuantity('${item.name}', ${item.quantity + 1})">+</button>
+                            </div>
+                            <div>${formatPrice(itemTotal)}</div>
+                        </div>
+                    `;
+                });
+                dropdown.innerHTML = `
+                    ${itemsHTML}
+                    <div class="cart-dropdown-total">Total: ${formatPrice(total)}</div>
+                    <div class="cart-dropdown-checkout">
+                        <button onclick="proceedToCheckout()">Checkout</button>
+                    </div>
+                `;
+            }
+        }
+
+        // Function to render summary cart
+        function renderSummaryCart() {
+            const summaryCartSection = document.getElementById('summaryCartSection');
+            const summaryCartContent = document.getElementById('summaryCartContent');
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            
+            if (cart.length === 0) {
+                summaryCartSection.style.display = 'none';
+            } else {
+                let total = 0;
+                let totalItems = 0;
+                cart.forEach(item => {
+                    total += item.price * item.quantity;
+                    totalItems += item.quantity;
+                });
+                summaryCartContent.innerHTML = `
+                    <div>Total Items: ${totalItems}</div>
+                    <div>Total Harga: ${formatPrice(total)}</div>
+                `;
+                summaryCartSection.style.display = 'block';
+            }
+        }
+
+        // Function to proceed to checkout
+        function proceedToCheckout() {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            if (cart.length === 0) {
+                alert('Keranjang Anda kosong. Silakan tambahkan item sebelum melanjutkan ke checkout.');
+            } else {
+                alert('Melanjutkan ke checkout. Anda akan diarahkan ke halaman pembayaran.');
+                window.location.href = 'cart.html';
+            }
+        }
+    </script>
+</body>
+</html>

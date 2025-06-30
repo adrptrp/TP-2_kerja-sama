@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Cellular Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/checkout.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    body { background: #f9f8f6; }
+    .checkout-main { display: flex; gap: 2.5rem; max-width: 1100px; margin: 2.5rem auto; }
+    .checkout-left { flex: 2; background: #fff; border-radius: 18px; padding: 2.5rem 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); }
+    .checkout-right { flex: 1; background: #fff; border-radius: 18px; padding: 2.5rem 2rem; box-shadow: 0 2px 12px rgba(0,0,0,0.04); min-width: 320px; }
+    .section-title { font-size: 1.1rem; font-weight: 700; color: #b4690e; margin-bottom: 0.7rem; letter-spacing: 0.01em; }
+    .alamat-box { background: #f5f6fa; border-radius: 12px; padding: 1.1rem 1.2rem; margin-bottom: 1.2rem; display: flex; justify-content: space-between; align-items: flex-start; }
+    .alamat-info { font-size: 1rem; color: #222; }
+    .alamat-ubah-btn { background: #eee; border: none; border-radius: 8px; padding: 0.3rem 1.1rem; font-size: 0.95rem; color: #555; cursor: pointer; }
+    .produk-box { display: flex; align-items: center; gap: 1rem; background: #f5f6fa; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1.2rem; }
+    .produk-img { width: 48px; height: 48px; border-radius: 8px; background: #fff; display: flex; align-items: center; justify-content: center; }
+    .produk-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .produk-info { font-size: 1rem; color: #222; }
+    .produk-info .produk-nama { font-weight: 600; }
+    .produk-info .produk-harga { color: #b4690e; font-weight: 600; font-size: 1rem; }
+    .opsi-pengiriman, .metode-pembayaran { margin-bottom: 1.5rem; }
+    .opsi-radio { display: flex; flex-direction: column; gap: 0.7rem; }
+    .opsi-radio label { display: flex; align-items: center; gap: 0.7rem; background: #f5f6fa; border-radius: 10px; padding: 0.7rem 1.1rem; cursor: pointer; font-size: 1rem; }
+    .opsi-radio input[type="radio"] { accent-color: #b4690e; width: 1.1rem; height: 1.1rem; }
+    .voucher-row, .koin-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.2rem; }
+    .voucher-input { border: none; background: #f5f6fa; border-radius: 8px; padding: 0.6rem 1.1rem; font-size: 1rem; width: 60%; }
+    .voucher-btn { background: none; border: none; color: #b4690e; font-weight: 600; cursor: pointer; font-size: 1rem; }
+    .koin-toggle { accent-color: #b4690e; width: 1.2rem; height: 1.2rem; }
+    .buat-pesanan-btn { background: #f59e42; color: #fff; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 10px; padding: 1rem 0; width: 100%; margin-top: 2rem; cursor: pointer; transition: background 0.2s; }
+    .buat-pesanan-btn:hover { background: #b4690e; }
+    .rincian-title { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.2rem; }
+    .rincian-row { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 1rem; }
+    .rincian-total { font-size: 1.3rem; font-weight: 800; color: #b4690e; margin-top: 1.2rem; }
+    @media (max-width: 900px) { .checkout-main { flex-direction: column; gap: 1.5rem; } .checkout-right { min-width: 0; } }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__container">
+      <div class="header__logo">Cellular Hub</div>
+      <nav class="header__nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="#">Support</a>
+        <a href="#">My Account</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__user">
+          <img src="assets/user.png" alt="User">
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Checkout Section -->
+  <section class="checkout-section">
+    <div class="container checkout-container" style="max-width:1400px; margin:2.5rem auto;">
+      <div class="checkout-header">
+        <h1>Checkout</h1>
+        <div class="checkout-steps">
+          <div class="step active">1. Cart</div>
+          <div class="step active">2. Checkout</div>
+          <div class="step">3. Payment</div>
+        </div>
+      </div>
+      <div class="checkout-content">
+        <div class="checkout-main">
+          <div class="checkout-left">
+            <div class="section-title">Alamat Pengiriman</div>
+            <div class="alamat-box">
+              <div class="alamat-info" id="alamat-info">
+                <div><b id="nama-penerima">Clara Wijaya</b></div>
+                <div id="nomor-telepon">0812-3456-7890</div>
+                <div id="alamat-lengkap">Jalan Mawar No. 12, RT 005 RW 003, Kelurahan Melati, Kecamatan Indah, Kota Jakarta Selatan, DKI Jakarta, 12345</div>
+              </div>
+              <button class="alamat-ubah-btn" onclick="ubahAlamat()">Ubah</button>
+            </div>
+            <div class="section-title">Produk Dipesan</div>
+            <div id="checkout-products-list"></div>
+            <div class="section-title">Opsi Pengiriman</div>
+            <div class="opsi-pengiriman">
+              <div class="opsi-radio">
+                <label><input type="radio" name="shipping" value="reg" checked> Reguler <span style="margin-left:auto; color:#b4690e;">Rp 10.000</span></label>
+                <label><input type="radio" name="shipping" value="hemat"> Hemat <span style="margin-left:auto; color:#b4690e;">Rp 5.000</span></label>
+              </div>
+            </div>
+            <div class="section-title">Voucher</div>
+            <div class="voucher-row">
+              <input type="text" class="voucher-input" placeholder="Masukkan Kode Voucher">
+              <button class="voucher-btn" onclick="terapkanVoucher()">Terapkan</button>
+            </div>
+            <div class="section-title">Koin Cellular Hub</div>
+            <div class="koin-row">
+              <span>Gunakan 100 Koin Cellular Hub</span>
+              <input type="checkbox" class="koin-toggle">
+            </div>
+            <div style="font-size:0.95rem; color:#888; margin-bottom:1.5rem;">Koin tidak dapat ditukar dengan uang tunai.</div>
+            <div class="section-title">Metode Pembayaran</div>
+            <div class="metode-pembayaran">
+              <div class="opsi-radio">
+                <label><input type="radio" name="payment" value="bank" checked> Transfer Bank</label>
+                <label><input type="radio" name="payment" value="kartu"> Kartu Kredit/Debit</label>
+                <label><input type="radio" name="payment" value="cod"> Bayar di Tempat (COD)</label>
+                <label><input type="radio" name="payment" value="hubpay"> Cellular Hub Pay</label>
+              </div>
+            </div>
+            <button class="buat-pesanan-btn">Buat Pesanan</button>
+          </div>
+          <div class="checkout-right">
+            <div class="rincian-title">Rincian Pembayaran</div>
+            <div id="checkout-summary-list"></div>
+            <div class="rincian-total">Total Pembayaran<br><span id="total-summary">Rp 0</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer__copyright">
+      <div class="footer__socials">
+        <img src="assets/twitter.png" alt="Twitter">
+        <img src="assets/facebook.png" alt="Facebook">
+        <img src="assets/instagram.png" alt="Instagram">
+      </div>
+      <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="js/checkout.js"></script>
+  <script>
+    function ubahAlamat() {
+      const nama = prompt("Masukkan nama penerima:", document.getElementById("nama-penerima").textContent);
+      const telepon = prompt("Masukkan nomor telepon:", document.getElementById("nomor-telepon").textContent);
+      const alamat = prompt("Masukkan alamat lengkap:", document.getElementById("alamat-lengkap").textContent);
+      
+      if (nama && telepon && alamat) {
+        document.getElementById("nama-penerima").textContent = nama;
+        document.getElementById("nomor-telepon").textContent = telepon;
+        document.getElementById("alamat-lengkap").textContent = alamat;
+        alert("Alamat pengiriman telah diperbarui.");
+      }
+    }
+    
+    function terapkanVoucher() {
+      const kodeVoucher = document.querySelector(".voucher-input").value;
+      if (kodeVoucher) {
+        alert("Voucher '" + kodeVoucher + "' telah diterapkan.");
+      } else {
+        alert("Silakan masukkan kode voucher terlebih dahulu.");
+      }
+    }
+  </script>
+</body>
+</html>

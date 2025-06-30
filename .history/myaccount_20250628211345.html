@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Switcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(to bottom right, #800080, #0000FF, #4B0082);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #FF69B4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .username {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .account-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .switch-btn {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(4px);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .switch-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.2s ease;
+        }
+
+        .switch-btn.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 320px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: all 0.2s ease;
+            z-index: 1000;
+            overflow: hidden;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .dropdown-header {
+            padding: 12px 16px 12px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.02);
+        }
+
+        .current-account {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .current-account .avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .account-details h3 {
+            color: #111827;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .account-details p {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .account-list {
+            padding: 8px 0;
+        }
+
+        .account-list-label {
+            padding: 8px 16px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #6B7280;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.15s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .account-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .account-item .avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .account-item .account-details h4 {
+            color: #111827;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+
+        .account-item .account-details p {
+            color: #6B7280;
+            font-size: 13px;
+        }
+
+        .add-account {
+            margin: 0 8px 8px;
+            background: transparent;
+            color: #2563EB;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            width: calc(100% - 16px);
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-align: left;
+        }
+
+        .add-account:hover {
+            background: rgba(37, 99, 235, 0.05);
+        }
+
+        .add-account-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .demo-content {
+            margin-top: 24px;
+            padding: 32px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-content h2 {
+            color: white;
+            margin-bottom: 24px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .demo-content p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            font-size: 16px;
+        }
+
+        .demo-card {
+            margin-top: 24px;
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .demo-card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .demo-card-header h3 {
+            color: #111827;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .demo-card-header p {
+            color: #6B7280;
+            font-size: 14px;
+        }
+
+        .feature-list {
+            background: rgba(37, 99, 235, 0.05);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .feature-list p {
+            color: #1D4ED8;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .feature-list ul {
+            color: #1D4ED8;
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .feature-list ul li {
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .feature-list ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #1D4ED8;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="user-info">
+                <div class="avatar" id="current-avatar">A</div>
+                <div class="username" id="current-username">Adrian</div>
+            </div>
+            
+            <div class="account-switcher">
+                <button class="switch-btn" onclick="toggleDropdown()">
+                    Switch Account
+                    <span class="dropdown-arrow">▼</span>
+                </button>
+                
+                <div class="dropdown" id="dropdown">
+                    <div class="dropdown-header">
+                        <div class="current-account">
+                            <div class="avatar" id="dropdown-current-avatar">A</div>
+                            <div class="account-details">
+                                <h3 id="dropdown-current-name">Adrian</h3>
+                                <p id="dropdown-current-email">adrian@example.com</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="account-list">
+                        <div class="account-list-label">Switch to account</div>
+                        
+                        <button class="account-item" onclick="switchAccount('Sarah', 'sarah@example.com', 'S', '#38bdf8')">
+                            <div class="avatar" style="background-color: hsl(120, 70%, 60%);">S</div>
+                            <div class="account-details">
+                                <h4>Sarah</h4>
+                                <p>sarah@example.com</p>
+                            </div>
+                        </button>
+                        
+                        <button class="account-item" onclick="switchAccount('Michael', 'michael@example.com', 'M', '#34d399')">
+                            <div class="avatar" style="background-color: hsl(180, 70%, 60%);">M</div>
+                            <div class="account-details">
+                                <h4>Michael</h4>
+                                <p>michael@example.com</p>
+                            </div>
+                        </button>
+                        
+                        <button class="account-item" onclick="switchAccount('Lisa', 'lisa@example.com', 'L', '#fbbf24')">
+                            <div class="avatar" style="background-color: hsl(240, 70%, 60%);">L</div>
+                            <div class="account-details">
+                                <h4>Lisa</h4>
+                                <p>lisa@example.com</p>
+                            </div>
+                        </button>
+                    </div>
+                    
+                    <button class="add-account" onclick="addAccount()">
+                        <div class="add-account-icon">
+                            <span style="font-size: 20px; color: #2563EB;">+</span>
+                        </div>
+                        <span>Add Another Account</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="demo-content">
+            <h2>Demo Content</h2>
+            <p>Ini adalah konten demo untuk menunjukkan bahwa dropdown account switcher sekarang transparan dan tidak mengganggu visibilitas konten di belakangnya.</p>
+            <p>Meskipun dropdown terbuka, konten ini tetap terlihat jelas tanpa terganggu transparansi. Dropdown menggunakan backdrop-filter dan background semi-transparan.</p>
+            <p>Sekarang nama-nama akun terlihat jelas dan mudah dibaca dengan informasi email masing-masing akun.</p>
+        </div>
+
+        <div class="demo-card">
+            <div class="demo-card-header">
+                <div class="avatar" id="card-current-avatar">A</div>
+                <div>
+                    <h3>Akun Aktif: <span id="card-current-name">Adrian</span></h3>
+                    <p id="card-current-email">adrian@example.com</p>
+                </div>
+            </div>
+            
+            <div class="feature-list">
+                <p><strong>Fitur Account Switcher:</strong></p>
+                <ul>
+                    <li>Menampilkan nama dan email setiap akun</li>
+                    <li>Avatar berwarna unik untuk setiap akun</li>
+                    <li>Highlight akun yang sedang aktif</li>
+                    <li>Tombol untuk menambah akun baru</li>
+                    <li>Animasi smooth saat membuka/menutup</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeDropdown()"></div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            const overlay = document.getElementById('overlay');
+            const switchBtn = document.querySelector('.switch-btn');
+            
+            if (dropdown.classList.contains('show')) {
+                closeDropdown();
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
+                switchBtn.classList.add('active');
+            }
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            const overlay = document.getElementById('overlay');
+            const switchBtn = document.querySelector('.switch-btn');
+            
+            dropdown.classList.remove('show');
+            overlay.classList.remove('show');
+            switchBtn.classList.remove('active');
+        }
+
+        function switchAccount(name, email, initial, color) {
+            // Update current user info in multiple places
+            document.getElementById('current-username').textContent = name;
+            document.getElementById('current-avatar').textContent = initial;
+            document.getElementById('current-avatar').style.backgroundColor = color || `hsl(${Math.random() * 360}, 70%, 60%)`;
+            
+            document.getElementById('dropdown-current-name').textContent = name;
+            document.getElementById('dropdown-current-email').textContent = email;
+            document.getElementById('dropdown-current-avatar').textContent = initial;
+            document.getElementById('dropdown-current-avatar').style.backgroundColor = color || `hsl(${Math.random() * 360}, 70%, 60%)`;
+            
+            document.getElementById('card-current-name').textContent = name;
+            document.getElementById('card-current-email').textContent = email;
+            document.getElementById('card-current-avatar').textContent = initial;
+            document.getElementById('card-current-avatar').style.backgroundColor = color || `hsl(${Math.random() * 360}, 70%, 60%)`;
+            
+            // Close dropdown
+            closeDropdown();
+            
+            console.log(`Switched to account: ${name} (${email})`);
+        }
+
+        function addAccount() {
+            alert('Feature untuk menambah akun baru akan segera tersedia!');
+            closeDropdown();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const switcher = document.querySelector('.account-switcher');
+            if (!switcher.contains(event.target)) {
+                closeDropdown();
+            }
+        });
+
+        // Close dropdown with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+    </script>
+</body>
+</html>

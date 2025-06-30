@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Detail - Cellular Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+  <style>
+    .product-detail-container { max-width: 900px; margin: 2rem auto; background: #fff; border-radius: 18px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); padding: 2.5rem 2rem; }
+    .product-detail-header { display: flex; flex-direction: column; align-items: center; }
+    .product-detail-image { width: 350px; height: 350px; background: #f5f6fa; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 2rem; }
+    .product-detail-image img { max-width: 90%; max-height: 90%; object-fit: contain; }
+    .product-detail-title { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; text-align: center; }
+    .product-detail-price { font-size: 1.4rem; font-weight: 700; color: #667eea; margin-bottom: 1.2rem; text-align: center; }
+    .product-detail-keyfeatures { display: flex; gap: 1rem; margin-bottom: 1.5rem; justify-content: center; flex-wrap: wrap; }
+    .product-detail-keyfeature { background: #f5f6fa; border-radius: 12px; padding: 0.5rem 1.2rem; font-size: 1rem; color: #2d3748; font-weight: 500; }
+    .product-detail-section { margin-bottom: 2rem; }
+    .product-detail-section h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.7rem; color: #333; }
+    .product-detail-specs { display: grid; grid-template-columns: 1fr 2fr; gap: 0.5rem 1.5rem; }
+    .product-detail-specs-label { color: #888; font-weight: 500; }
+    .product-detail-specs-value { color: #222; font-weight: 600; }
+    .product-detail-buy { display: flex; justify-content: center; margin-top: 2rem; }
+    .product-detail-buy-btn { background: #667eea; color: #fff; font-size: 1.1rem; font-weight: 700; border: none; border-radius: 12px; padding: 0.9rem 2.5rem; cursor: pointer; transition: background 0.2s; }
+    .product-detail-buy-btn:hover { background: #4c51bf; }
+    @media (max-width: 600px) { .product-detail-container { padding: 1rem 0.3rem; } .product-detail-image { width: 100%; height: 220px; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__container">
+      <div class="header__logo">Cellular Hub</div>
+      <nav class="header__nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html">Shop</a>
+        <a href="#">Support</a>
+        <a href="#">My Account</a>
+      </nav>
+      <div class="header__actions">
+        <div class="header__user">
+          <img src="assets/user.png" alt="User">
+        </div>
+        <div class="header__cart">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="product-detail-container" id="product-detail-container">
+      <!-- Product detail will be loaded here by JS -->
+    </div>
+  </main>
+  <!-- Shopping Cart Modal -->
+  <div class="cart-modal" id="cart-modal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h3>Shopping Cart</h3>
+        <button class="close-cart" id="close-cart">×</button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total: <span id="cart-total">0.00</span></span>
+        </div>
+        <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="footer__links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer__copyright">
+      <div class="footer__socials">
+        <img src="assets/twitter.png" alt="Twitter">
+        <img src="assets/facebook.png" alt="Facebook">
+        <img src="assets/instagram.png" alt="Instagram">
+      </div>
+      <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+    </div>
+  </footer>
+  <script src="js/product.js"></script>
+</body>
+</html> 

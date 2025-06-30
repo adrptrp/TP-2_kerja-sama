@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop - Cellular Hub</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__container">
+      <div class="header__logo">Cellular Hub</div>
+      <nav class="header__nav">
+        <a href="index.html">Home</a>
+        <a href="shop.html" class="active">Shop</a>
+        <a href="#">Support</a>
+        <a href="#">My Account</a>
+      </nav>
+      <div class="header__actions">
+        <input type="text" class="header__search" placeholder="Search products...">
+        <div class="header__user">
+          <img src="assets/user.png" alt="User">
+        </div>
+        <div class="header__cart">
+          <span class="cart-icon">🛒</span>
+          <span class="cart-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Shop Section -->
+  <section class="shop-section">
+    <div class="container">
+      <div class="shop-header">
+        <h1>Shop All Products</h1>
+        <div class="shop-controls">
+          <div class="filter-section">
+            <div class="filter-group">
+              <label for="category-filter">Brand</label>
+              <select id="category-filter">
+                <option value="">All</option>
+                <option value="apple">Apple</option>
+                <option value="samsung">Samsung</option>
+                <option value="xiaomi">Xiaomi</option>
+                <option value="realme">Realme</option>
+                <option value="oppo">OPPO</option>
+                <option value="vivo">Vivo</option>
+                <option value="asus">ASUS</option>
+                <option value="redmagic">RedMagic</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <label for="price-filter">Price</label>
+              <select id="price-filter">
+                <option value="">All</option>
+                <option value="entry">Entry Level (1 - 2.5 juta)</option>
+                <option value="mid">Mid Range (3 - 6 juta)</option>
+                <option value="high">High End (7 - 10 juta)</option>
+                <option value="flagship">Flagship (10 - 30 juta)</option>
+              </select>
+            </div>
+          </div>
+          <div class="search-section">
+            <div class="search-bar">
+              <span class="search-icon">🔍</span>
+              <input type="text" class="header__search" placeholder="Search for mobile phones...">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="shop-content">
+        <div class="products-grid" id="products-grid">
+          <!-- Products will be loaded here via JavaScript -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Shopping Cart Modal -->
+  <div class="cart-modal" id="cart-modal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h3>Shopping Cart</h3>
+        <button class="close-cart" id="close-cart">×</button>
+      </div>
+      <div class="cart-items" id="cart-items">
+        <!-- Cart items will be loaded here -->
+      </div>
+      <div class="cart-footer">
+        <div class="cart-total">
+          <span>Total: $<span id="cart-total">0.00</span></span>
+        </div>
+        <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer__links">
+      <a href="#">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </div>
+    <div class="footer__copyright">
+      <div class="footer__socials">
+        <img src="assets/twitter.png" alt="Twitter">
+        <img src="assets/facebook.png" alt="Facebook">
+        <img src="assets/instagram.png" alt="Instagram">
+      </div>
+      <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+  <script src="js/shop.js"></script>
+</body>
+</html> 

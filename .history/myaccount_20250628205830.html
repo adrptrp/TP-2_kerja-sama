@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Hub - My Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .switch-button {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        
+        .switch-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .dropdown-chevron {
+            transition: transform 0.2s ease;
+        }
+        
+        .dropdown-chevron.open {
+            transform: rotate(180deg);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            height: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .menu-item {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            color: white;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-details h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details p {
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-info h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+
+        .device-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .device-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .connection-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-indicator">🔒 Secure Connection</div>
+    
+    <header class="header">
+        <div class="logo">Cellular Hub</div>
+        <nav class="nav">
+            <a href="#" onclick="switchPage('home')">Home</a>
+            <a href="#" onclick="switchPage('shop')">Shop</a>
+            <a href="#" onclick="switchPage('support')">Support</a>
+            <a href="#" onclick="switchPage('cart')">Cart</a>
+            <a href="#" onclick="switchPage('account')" class="active">My Account</a>
+        </nav>
+        <div class="user-info">
+            <div class="user-avatar" id="headerAvatar" style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1); display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; font-weight: 600; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); position: relative; overflow: hidden;"></div>
+            <div id="currentUserName" style="font-size: 18px; font-weight: 500; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);"></div>
+        </div>
+        <button class="switch-account" onclick="toggleAccountDropdown()" style="background: linear-gradient(135deg, #ff6b6b, #ff8e53); color: white; border: none; padding: 10px 20px; border-radius: 25px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3); position: relative; overflow: hidden;">
+            Switch Account
+            <span class="dropdown-arrow" style="transition: transform 0.3s ease;">▼</span>
+        </button>
+    </header>
+
+    <div class="container">
+        <div id="loginContainer" style="background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 16px; padding: 3rem; max-width: 500px; margin: 5rem auto; border: 1px solid rgba(255, 255, 255, 0.2); display: none;">
+            <h1 style="font-size: 2rem; margin-bottom: 2rem; color: white; text-align: center;">Login to Your Account</h1>
+            <form onsubmit="login(event)">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="loginName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+        <div id="accountContent" class="account-grid" style="display: none;">
+            <aside class="sidebar">
+                <h3>Account Menu</h3>
+                <a class="menu-item active" onclick="showSection('profile')">
+                    📱 Profile & Settings
+                </a>
+                <a class="menu-item" onclick="showSection('orders')">
+                    📦 Order History
+                </a>
+                <a class="menu-item" onclick="showSection('devices')">
+                    📲 My Devices
+                </a>
+                <a class="menu-item" onclick="showSection('billing')">
+                    💳 Billing & Payment
+                </a>
+                <a class="menu-item" onclick="showSection('security')">
+                    🔐 Security & Privacy
+                </a>
+                <a class="menu-item" onclick="showSection('support')">
+                    💬 Support Tickets
+                </a>
+                <a class="menu-item" onclick="logout()">
+                    🚪 Logout
+                </a>
+            </aside>
+
+            <main class="main-content">
+                <!-- Profile Section -->
+                <section id="profile" class="content-section active">
+                    <h1 class="section-title">Profile & Settings</h1>
+                    
+                    <div class="profile-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar">A</div>
+                            <div class="profile-details">
+                                <h2 id="profileName"></h2>
+                                <p id="profileEmail"></p>
+                                <p id="memberSince"></p>
+                            </div>
+                        </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value"></div>
+                                <div class="stat-label">Total Orders</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value"></div>
+                                <div class="stat-label">Active Devices</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value"></div>
+                                <div class="stat-label">Total Spent</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Personal Information</h3>
+                        <form onsubmit="updateProfile(event)">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="firstName" value="" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" id="lastName" value="" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="email" value= required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="phone" value= required>
+                            </div>
+                            <button type="submit" class="btn">Update Profile</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section">
+                    <h1 class="section-title">Order History</h1>
+                    
+                    <div class="order-item">
+                        <div class="order-info">
+                            <h4>iPhone 15 Pro Max - 256GB</h4>
+                            <p>Order #CH-2024-001234 • June 15, 2024</p>
+                            <p>Rp 17,985,000</p>
+                        </div>
+                        <div class="order-status status-completed">Delivered</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="order-info">
+                            <h4>Samsung Galaxy S24 Ultra</h4>
+                            <p>Order #CH-2024-001189 • May 28, 2024</p>
+                            <p>Rp 19,485,000</p>
+                        </div>
+                        <div class="order-status status-completed">Delivered</div>
+                    </div>
+                    
+                    <div class="order-item">
+                        <div class="order-info">
+                            <h4>Wireless Charging Pad</h4>
+                            <p>Order #CH-2024-001156 • April 12, 2024</p>
+                            <p>Rp 749,000</p>
+                        </div>
+                        <div class="order-status status-pending">Processing</div>
+                    </div>
+                </section>
+
+                <!-- Devices Section -->
+                <section id="devices" class="content-section">
+                    <h1 class="section-title">My Devices</h1>
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Device Management Dashboard</h3>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">Manage all devices connected to your account. Monitor status and activity for each device.</p>
+                        <div id="devices-list">
+                            <!-- Devices will be dynamically loaded here based on user login -->
+                        </div>
+                        <div style="margin-top: 1.5rem;">
+                            <button class="btn" onclick="refreshDevices()">Refresh Devices</button>
+                            <button class="btn" style="margin-left: 0.5rem;" onclick="addNewDevice()">Add New Device</button>
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Subscription/Plan Tracking</h3>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">Track subscription packages and monthly costs for each device.</p>
+                        <div id="subscription-summary">
+                            <!-- Subscription summary will be dynamically updated here -->
+                        </div>
+                    </div>
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Security & Monitoring</h3>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">Track last activity for security, detect unknown devices, and monitor for unauthorized usage.</p>
+                        <div id="security-alerts">
+                            <!-- Security alerts will be dynamically updated here -->
+                        </div>
+                        <button class="btn" onclick="runSecurityScan()">Run Security Scan</button>
+                    </div>
+                </section>
+
+                <!-- Billing Section -->
+                <section id="billing" class="content-section">
+                    <h1 class="section-title">Billing & Payment</h1>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Current Bill</h3>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <span>Total Bulanan:</span>
+                            <span style="font-size: 1.5rem; font-weight: bold;">Rp 3,089,000</span>
+                        </div>
+                        <p style="opacity: 0.8;">Tanggal tagihan berikutnya: 15 Juli 2025</p>
+                        <button class="btn" style="margin-top: 1rem;">View Detailed Bill</button>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Payment Methods</h3>
+                        <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p><strong>**** **** **** 4567</strong></p>
+                                    <p style="opacity: 0.8;">Expires 12/27</p>
+                                </div>
+                                <span style="background: rgba(76, 175, 80, 0.3); color: #4caf50; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Primary</span>
+                            </div>
+                        </div>
+                        <button class="btn">Add Payment Method</button>
+                    </div>
+                </section>
+
+                <!-- Security Section -->
+                <section id="security" class="content-section">
+                    <h1 class="section-title">Security & Privacy</h1>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Account Security</h3>
+                        <div class="form-group">
+                            <label>Change Password</label>
+                            <input type="password" placeholder="Current Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Confirm New Password">
+                        </div>
+                        <button class="btn">Update Password</button>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Two-Factor Authentication</h3>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">Add an extra layer of security to your account</p>
+                        <button class="btn">Enable 2FA</button>
+                    </div>
+                </section>
+
+                <!-- Support Section -->
+                <section id="support" class="content-section">
+                    <h1 class="section-title">Support Tickets</h1>
+                    
+                    <div class="profile-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                            <h3>Recent Tickets</h3>
+                            <button class="btn">Create New Ticket</button>
+                        </div>
+                        
+                        <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4>Billing Question</h4>
+                                    <p style="opacity: 0.8;">Ticket #SUP-2024-789</p>
+                                    <p style="opacity: 0.8;">Created: June 20, 2025</p>
+                                </div>
+                                <span class="order-status status-pending">Open</span>
+                            </div>
+                        </div>
+                        
+                        <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 8px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <h4>Device Setup Help</h4>
+                                    <p style="opacity: 0.8;">Ticket #SUP-2024-756</p>
+                                    <p style="opacity: 0.8;">Created: June 15, 2025</p>
+                                </div>
+                                <span class="order-status status-completed">Resolved</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // User account data will be managed dynamically
+        let userAccounts = [];
+        let currentAccountIndex = 0;
+        let userAccount = null;
+        
+        // Fungsi utama untuk Member Since Jakarta
+        function getMemberSinceJakarta(joinDate, locale = 'id-ID', format = 'month-year') {
+            const date = new Date(joinDate);
+            let options = { timeZone: 'Asia/Jakarta' };
+            
+            switch(format) {
+                case 'month-year':
+                    options = { ...options, year: 'numeric', month: 'long' };
+                    break;
+                case 'full-date':
+                    options = { ...options, year: 'numeric', month: 'long', day: 'numeric' };
+                    break;
+                case 'short':
+                    options = { ...options, year: '2-digit', month: 'short' };
+                    break;
+            }
+            
+            const formatter = new Intl.DateTimeFormat(locale, options);
+            return `${formatter.format(date)}`;
+        }
+        
+        // Initialize default user if no data exists
+        function initializeDefaultUser() {
+            if (userAccounts.length === 0) {
+                const defaultUser = {
+                    id: 'user_default_001',
+                    firstName: 'Adrian',
+                    lastName: '',
+                    email: 'adrian@example.com',
+                    phone: '+62 812-3456-7890',
+                    memberSince: new Date().toISOString(),
+                    isAuthenticated: true,
+                    sessionToken: 'default_token_xyz789',
+                    lastLogin: new Date(),
+                    preferences: {
+                        theme: 'dark',
+                        notifications: true,
+                        twoFactor: false
+                    },
+                    avatar: 'A'
+                };
+                userAccounts.push(defaultUser);
+                currentAccountIndex = 0;
+                userAccount = userAccounts[currentAccountIndex];
+                localStorage.setItem('userAccounts', JSON.stringify(userAccounts));
+                localStorage.setItem('currentAccountIndex', currentAccountIndex.toString());
+            }
+        }
+
+        // Load user data from localStorage if available
+        const storedAccounts = localStorage.getItem('userAccounts');
+        if (storedAccounts) {
+            const parsedAccounts = JSON.parse(storedAccounts);
+            userAccounts = parsedAccounts.map(acc => ({ ...acc, lastLogin: new Date(acc.lastLogin) }));
+            currentAccountIndex = parseInt(localStorage.getItem('currentAccountIndex') || '0', 10);
+            if (currentAccountIndex >= userAccounts.length) {
+                currentAccountIndex = 0;
+            }
+            userAccount = userAccounts[currentAccountIndex];
+        }
+
+        // Fungsi untuk menampilkan section
+        function showSection(sectionName) {
+            // Sembunyikan semua section
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Hapus class active dari menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            // Tampilkan section yang dipilih
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Tambahkan class active ke menu item yang diklik
+            event.target.classList.add('active');
+            
+            // Log aktivitas untuk tracking
+            console.log(`User ${userAccount.id} accessed ${sectionName} section`);
+        }
+
+        // Fungsi untuk update profile
+        function updateProfile(event) {
+            event.preventDefault();
+            
+            // Validasi session
+            if (!userAccount.isAuthenticated) {
+                alert('Session expired. Please login again.');
+                return;
+            }
+            
+            // Ambil data dari form
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            // Update user account object
+            userAccount.firstName = firstName;
+            userAccount.lastName = lastName;
+            userAccount.email = email;
+            userAccount.phone = phone;
+            
+        // Save to localStorage
+        localStorage.setItem('userAccounts', JSON.stringify(userAccounts));
+        localStorage.setItem('currentAccountIndex', currentAccountIndex.toString());
+            
+            // Update tampilan
+            document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
+            document.getElementById('profileEmail').textContent = email;
+            
+            // Update avatar initials
+            const initials = firstName.charAt(0) + (lastName ? lastName.charAt(0) : '');
+            document.querySelector('.profile-avatar').textContent = initials;
+            
+            // Simulasi API call
+            setTimeout(() => {
+                alert('Profile updated successfully!');
+                console.log('User profile updated:', userAccount);
+            }, 500);
+        }
+
+        // Fungsi untuk switch page
+        function switchPage(page) {
+            if (page === 'account') {
+                return; // Sudah di halaman account
+            }
+            
+            // Redirect ke halaman yang sesuai
+            console.log(`Navigating to ${page} page`);
+            if (page === 'home') {
+                window.location.href = 'index.html';
+            } else if (page === 'shop') {
+                window.location.href = 'shop.html';
+            } else if (page === 'support') {
+                window.location.href = 'support.html';
+            } else if (page === 'cart') {
+                window.location.href = 'cart.html';
+            }
+        }
+
+        // Simulasi real-time connection monitoring
+        function checkConnection() {
+            const indicator = document.querySelector('.connection-indicator');
+            
+            // Simulasi check connection ke server
+            if (userAccount.isAuthenticated && userAccount.sessionToken) {
+                indicator.style.background = 'rgba(76, 175, 80, 0.9)';
+                indicator.innerHTML = '🔒 Secure Connection';
+            } else {
+                indicator.style.background = 'rgba(244, 67, 54, 0.9)';
+                indicator.innerHTML = '⚠️ Connection Lost';
+            }
+            updateHeaderUserInfo();
+        }
+        
+        // Update header user info
+        function updateHeaderUserInfo() {
+            const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+            document.getElementById('currentUserName').textContent = fullName;
+            document.getElementById('headerAvatar').textContent = userAccount.avatar;
+            document.getElementById('headerAvatar').style.background = getAvatarColor(userAccount.id);
+        }
+        
+        // Generate color for avatar based on ID
+        function getAvatarColor(id) {
+            const index = userAccounts.findIndex(acc => acc.id === id);
+            if (index === -1) return 'linear-gradient(45deg, #ff6b6b, #4ecdc4)';
+            const hue = (index * 60) % 360;
+            return `hsl(${hue}, 70%, 60%)`;
+        }
+        
+        // Toggle account dropdown
+        function toggleAccountDropdown() {
+            const dropdown = document.getElementById('accountDropdown');
+            const chevron = document.querySelector('.dropdown-chevron');
+            if (dropdown.style.display === 'none' || !dropdown.style.display) {
+                dropdown.style.display = 'block';
+                chevron.classList.add('open');
+                updateAccountDropdown();
+            } else {
+                dropdown.style.display = 'none';
+                chevron.classList.remove('open');
+            }
+        }
+        
+        // Update account dropdown content
+        function updateAccountDropdown() {
+            const loggedInAccountsDiv = document.getElementById('loggedInAccounts');
+            loggedInAccountsDiv.innerHTML = '';
+            
+            // Update current account header
+            const currentAvatar = document.getElementById('currentAvatar');
+            const currentName = document.getElementById('currentName');
+            const currentEmail = document.getElementById('currentEmail');
+            const currentFullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+            currentAvatar.textContent = userAccount.avatar;
+            currentAvatar.style.backgroundColor = getAvatarColor(userAccount.id);
+            currentName.textContent = currentFullName;
+            currentEmail.textContent = userAccount.email;
+            
+            // Filter out the current account from the list
+            const otherAccounts = userAccounts.filter((_, index) => index !== currentAccountIndex);
+            
+            if (otherAccounts.length > 0) {
+                otherAccounts.forEach((account, index) => {
+                    const fullName = account.lastName ? `${account.firstName} ${account.lastName}` : account.firstName;
+                    const accountItem = document.createElement('button');
+                    accountItem.style.width = '100%';
+                    accountItem.style.display = 'flex';
+                    accountItem.style.alignItems = 'center';
+                    accountItem.style.gap = '0.75rem';
+                    accountItem.style.padding = '0.75rem 1rem';
+                    accountItem.style.cursor = 'pointer';
+                    accountItem.style.border = 'none';
+                    accountItem.style.background = 'transparent';
+                    accountItem.style.transition = 'background 0.15s ease';
+                    accountItem.style.textAlign = 'left';
+                    accountItem.onmouseover = () => { accountItem.style.background = '#f8f9fa'; };
+                    accountItem.onmouseout = () => { accountItem.style.background = 'transparent'; };
+                    accountItem.innerHTML = `
+                        <div style="width: 2.5rem; height: 2.5rem; background: ${getAvatarColor(account.id)}; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold;">${account.avatar}</div>
+                        <div style="flex: 1;">
+                            <div style="font-weight: 500; color: #333;">${fullName}</div>
+                            <div style="font-size: 0.875rem; color: #666;">${account.email}</div>
+                        </div>
+                    `;
+                    accountItem.onclick = () => switchToAccount(userAccounts.findIndex(acc => acc.id === account.id));
+                    loggedInAccountsDiv.appendChild(accountItem);
+                });
+            } else {
+                const noAccounts = document.createElement('p');
+                noAccounts.textContent = 'No other accounts available.';
+                noAccounts.style.color = '#666';
+                noAccounts.style.padding = '0.5rem 1rem';
+                noAccounts.style.fontSize = '0.875rem';
+                loggedInAccountsDiv.appendChild(noAccounts);
+            }
+        }
+        
+        // Switch to a different account
+        function switchToAccount(index) {
+            if (index >= 0 && index < userAccounts.length) {
+                currentAccountIndex = index;
+                userAccount = userAccounts[currentAccountIndex];
+                localStorage.setItem('currentAccountIndex', currentAccountIndex.toString());
+                
+                // Update UI with new account data
+                const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+                document.getElementById('profileName').textContent = fullName;
+                document.getElementById('profileEmail').textContent = userAccount.email;
+                document.getElementById('memberSince').textContent = 'Member since ' + getMemberSinceJakarta(userAccount.memberSince, 'id-ID', 'month-year');
+                document.getElementById('firstName').value = userAccount.firstName;
+                document.getElementById('lastName').value = userAccount.lastName || '';
+                document.getElementById('email').value = userAccount.email;
+                document.getElementById('phone').value = userAccount.phone;
+                
+                const initials = userAccount.firstName.charAt(0) + (userAccount.lastName ? userAccount.lastName.charAt(0) : '');
+                document.querySelector('.profile-avatar').textContent = initials;
+                updateHeaderUserInfo();
+                
+                // Reload relevant data
+                loadUserDevices();
+                updateSubscriptionSummary();
+                updateSecurityAlerts();
+                
+                console.log('Switched to account:', fullName);
+                alert(`Switched to account: ${fullName}`);
+                document.getElementById('accountDropdown').style.display = 'none';
+            }
+        }
+        
+        // Add another account
+        function addAnotherAccount() {
+            document.getElementById('accountDropdown').style.display = 'none';
+            document.getElementById('accountContent').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            
+            // Reset login form for new account
+            document.getElementById('loginName').value = '';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPassword').value = '';
+            
+            alert('Please enter details for the new account.');
+        }
+
+        // Auto-sync user data setiap 30 detik
+        function autoSync() {
+            console.log('Auto-syncing user data...');
+            
+            // Simulasi sync dengan server
+            fetch('/api/user/sync', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${userAccount.sessionToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userAccount.id,
+                    lastSync: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('User data synced successfully');
+                } else {
+                    console.error('Sync failed');
+                }
+            })
+            .catch(error => {
+                console.error('Sync error:', error);
+            });
+        }
+
+        // Function to update subscription summary
+        function updateSubscriptionSummary() {
+            const subscriptionSummary = document.getElementById('subscription-summary');
+            subscriptionSummary.innerHTML = '';
+            
+            let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+            let totalCost = 0;
+            
+            userDevices.forEach(device => {
+                const costStr = device.cost.replace('Rp ', '').replace('/bulan', '').replace(',', '');
+                totalCost += parseInt(costStr, 10);
+                
+                const summaryItem = document.createElement('div');
+                summaryItem.style.marginBottom = '1rem';
+                summaryItem.innerHTML = `
+                    <p><strong>${device.name}</strong>: ${device.plan}</p>
+                    <p>Cost: ${device.cost}</p>
+                    <div style="margin-top: 0.5rem;">
+                        <button class="btn" style="padding: 0.5rem 1rem; background: linear-gradient(45deg, #ff6b6b, #ff8e53);" onclick="removeSubscription('${device.serial}')">Remove Subscription</button>
+                    </div>
+                `;
+                subscriptionSummary.appendChild(summaryItem);
+            });
+            
+            const totalItem = document.createElement('div');
+            totalItem.style.borderTop = '1px solid rgba(255, 255, 255, 0.3)';
+            totalItem.style.paddingTop = '1rem';
+            totalItem.innerHTML = `
+                <p><strong>Total Monthly Cost:</strong> Rp ${totalCost.toLocaleString('id-ID')}/bulan</p>
+            `;
+            subscriptionSummary.appendChild(totalItem);
+        }
+        
+        // Function to remove subscription
+        function removeSubscription(serial) {
+            if (confirm('Are you sure you want to remove this subscription?')) {
+                let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+                const deviceIndex = userDevices.findIndex(device => device.serial === serial);
+                if (deviceIndex !== -1) {
+                    userDevices[deviceIndex].plan = 'No Plan';
+                    userDevices[deviceIndex].cost = 'Rp 0/bulan';
+                    localStorage.setItem('userDevices', JSON.stringify(userDevices));
+                    loadUserDevices();
+                    updateSubscriptionSummary();
+                    updateSecurityAlerts();
+                    alert('Subscription removed successfully.');
+                } else {
+                    alert('Device not found.');
+                }
+            }
+        }
+        
+        // Function to update security alerts
+        function updateSecurityAlerts() {
+            const securityAlerts = document.getElementById('security-alerts');
+            securityAlerts.innerHTML = '';
+            
+            let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+            let alerts = [];
+            
+            userDevices.forEach(device => {
+                if (device.unknown) {
+                    alerts.push(`⚠️ Unknown device detected: ${device.name}`);
+                }
+                if (device.lastActivity.includes('Today') && device.active) {
+                    alerts.push(`Recent activity on ${device.name} at ${device.lastActivity}`);
+                }
+            });
+            
+            if (alerts.length === 0) {
+                const noAlerts = document.createElement('p');
+                noAlerts.textContent = 'No security alerts at this time.';
+                noAlerts.style.opacity = '0.8';
+                securityAlerts.appendChild(noAlerts);
+            } else {
+                alerts.forEach(alertText => {
+                    const alertItem = document.createElement('p');
+                    alertItem.textContent = alertText;
+                    alertItem.style.color = alertText.includes('Unknown') ? '#ff6b6b' : 'inherit';
+                    securityAlerts.appendChild(alertItem);
+                });
+            }
+        }
+        
+        // Function to run security scan
+        function runSecurityScan() {
+            alert('Running security scan...');
+            // Simulate detecting an unknown device
+            let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+            if (userDevices.length > 0) {
+                const randomDevice = userDevices[Math.floor(Math.random() * userDevices.length)];
+                randomDevice.unknown = Math.random() > 0.7; // 30% chance to detect as unknown
+                localStorage.setItem('userDevices', JSON.stringify(userDevices));
+            }
+            loadUserDevices();
+            updateSecurityAlerts();
+            alert('Security scan completed.');
+        }
+        
+        // Function to add new device
+        function addNewDevice() {
+            const name = prompt('Enter device name:');
+            const serial = prompt('Enter device serial number:');
+            const plan = prompt('Enter plan name:');
+            const cost = prompt('Enter monthly cost (Rp):');
+            
+            if (name && serial && plan && cost) {
+                let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+                userDevices.push({
+                    name: name,
+                    serial: serial,
+                    plan: plan,
+                    cost: `Rp ${parseInt(cost).toLocaleString('id-ID')}/bulan`,
+                    lastActivity: 'Never',
+                    active: false,
+                    status: 'Not Connected',
+                    unknown: false
+                });
+                localStorage.setItem('userDevices', JSON.stringify(userDevices));
+                loadUserDevices();
+                updateSubscriptionSummary();
+                updateSecurityAlerts();
+                alert('Device added successfully.');
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+        
+        // Initialize aplikasi
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const forceLogin = urlParams.get('login') === 'true';
+            
+            if (userAccount.isAuthenticated && !forceLogin) {
+                console.log('User sudah login sebelumnya');
+                // Load user data
+                const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+                document.getElementById('profileName').textContent = fullName;
+                document.getElementById('profileEmail').textContent = userAccount.email;
+                document.getElementById('memberSince').textContent = 'Member since ' + getMemberSinceJakarta(userAccount.memberSince, 'id-ID', 'month-year');
+                document.getElementById('firstName').value = userAccount.firstName;
+                document.getElementById('lastName').value = userAccount.lastName || '';
+                document.getElementById('email').value = userAccount.email;
+                document.getElementById('phone').value = userAccount.phone;
+                
+                const initials = userAccount.firstName.charAt(0) + (userAccount.lastName ? userAccount.lastName.charAt(0) : '');
+                document.querySelector('.profile-avatar').textContent = initials;
+                updateHeaderUserInfo();
+                
+                // Show account content
+                document.getElementById('accountContent').style.display = 'block';
+                document.getElementById('loginContainer').style.display = 'none';
+                
+                // Load user devices
+                loadUserDevices();
+                updateSubscriptionSummary();
+                updateSecurityAlerts();
+                
+                console.log('Welcome back, ' + fullName + '!');
+            } else {
+                // User belum login atau dipaksa login, tampilkan form login
+                document.getElementById('accountContent').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+            }
+            
+            // Start monitoring
+            checkConnection();
+            setInterval(checkConnection, 5000);
+            setInterval(autoSync, 30000);
+            
+            console.log('Cellular Hub My Account loaded for user:', userAccount.id);
+        });
+
+        // Event listeners untuk menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        // Fungsi untuk login
+        function login(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('loginName').value;
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Simulasi autentikasi
+            if (name && email && password) {
+                // Check if account already exists
+                const existingAccountIndex = userAccounts.findIndex(acc => acc.email === email);
+                if (existingAccountIndex !== -1) {
+                    // Account exists, switch to it
+                    switchToAccount(existingAccountIndex);
+                } else {
+                    // New account, add to list
+                    const nameParts = name.split(' ');
+                    const newAccount = {
+                        id: 'user_' + Math.random().toString(36).substr(2, 9),
+                        firstName: nameParts[0],
+                        lastName: nameParts.length > 1 ? nameParts.slice(1).join(' ') : '',
+                        email: email,
+                        phone: '+62 812-3456-7890',
+                        memberSince: new Date().toISOString(),
+                        isAuthenticated: true,
+                        sessionToken: 'user_token_' + Math.random().toString(36).substr(2, 9),
+                        lastLogin: new Date(),
+                        preferences: {
+                            theme: 'dark',
+                            notifications: true,
+                            twoFactor: false
+                        }
+                    };
+                    userAccounts.push(newAccount);
+                    currentAccountIndex = userAccounts.length - 1;
+                    userAccount = userAccounts[currentAccountIndex];
+                    
+                    // Save to localStorage
+                    localStorage.setItem('userAccounts', JSON.stringify(userAccounts));
+                    localStorage.setItem('currentAccountIndex', currentAccountIndex.toString());
+                    
+                    // Update UI setelah login
+                    document.getElementById('loginContainer').style.display = 'none';
+                    document.getElementById('accountContent').style.display = 'block';
+                    
+                    // Load user data
+                    const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+                    document.getElementById('profileName').textContent = fullName;
+                    document.getElementById('profileEmail').textContent = email;
+                    document.getElementById('firstName').value = userAccount.firstName;
+                    document.getElementById('lastName').value = userAccount.lastName || '';
+                    document.getElementById('email').value = email;
+                    document.getElementById('phone').value = userAccount.phone || '+62 812-3456-7890';
+                    
+                    const initials = userAccount.firstName.charAt(0) + (userAccount.lastName ? userAccount.lastName.charAt(0) : '');
+                    document.querySelector('.profile-avatar').textContent = initials;
+                    updateHeaderUserInfo();
+                    
+                    // Reload relevant data
+                    loadUserDevices();
+                    updateSubscriptionSummary();
+                    updateSecurityAlerts();
+                    
+                    console.log('New user logged in:', userAccount);
+                    alert('Login successful! New account added.');
+                }
+            } else {
+                alert('Please fill in all fields.');
+            }
+        }
+
+        // Fungsi untuk logout
+        function logout() {
+            if (confirm('Are you sure you want to logout from this account?')) {
+                // Mark current account as not authenticated
+                userAccounts[currentAccountIndex].isAuthenticated = false;
+                userAccounts[currentAccountIndex].sessionToken = '';
+                
+                // Save to localStorage
+                localStorage.setItem('userAccounts', JSON.stringify(userAccounts));
+                
+                // Update UI
+                document.getElementById('accountContent').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+                
+                // Reset login form
+                document.getElementById('loginName').value = '';
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPassword').value = '';
+                
+                console.log('User logged out from account:', userAccount.email);
+                alert('You have been logged out from this account. Please log in again or switch to another account.');
+            }
+        }
+
+        // Function to load user devices dynamically
+        function loadUserDevices() {
+            const devicesList = document.getElementById('devices-list');
+            devicesList.innerHTML = ''; // Clear existing content
+            
+            // Check if user has devices in localStorage
+            let userDevices = [];
+            const storedDevices = localStorage.getItem('userDevices');
+            if (storedDevices) {
+                userDevices = JSON.parse(storedDevices);
+            } else {
+                // Default devices if none are saved
+                userDevices = [
+                    {
+                        name: "iPhone 15 Pro Max",
+                        serial: "123456789ABC",
+                        plan: "Unlimited Premium",
+                        cost: "Rp 1,349,000/bulan",
+                        lastActivity: "Today, 2:30 PM",
+                        active: true,
+                        status: "Connected",
+                        unknown: false
+                    },
+                    {
+                        name: "Samsung Galaxy S24 Ultra",
+                        serial: "DEF987654321",
+                        plan: "Business Unlimited",
+                        cost: "Rp 1,199,000/bulan",
+                        lastActivity: "Yesterday, 11:45 PM",
+                        active: true,
+                        status: "Connected",
+                        unknown: false
+                    },
+                    {
+                        name: "iPad Pro 12.9\"",
+                        serial: "GHI456789DEF",
+                        plan: "Tablet Data",
+                        cost: "Rp 539,000/bulan",
+                        lastActivity: "Today, 9:15 AM",
+                        active: true,
+                        status: "Connected",
+                        unknown: false
+                    }
+                ];
+                localStorage.setItem('userDevices', JSON.stringify(userDevices));
+            }
+            
+            // Display devices
+            userDevices.forEach(device => {
+                const deviceCard = document.createElement('div');
+                deviceCard.className = 'device-card';
+                deviceCard.innerHTML = `
+                    <div class="device-header">
+                        <h4>${device.name}</h4>
+                        <div class="device-status ${device.active ? 'status-active' : ''}">${device.active ? 'Active' : 'Inactive'}</div>
+                    </div>
+                    <p>Serial: ${device.serial}</p>
+                    <p>Plan: ${device.plan}</p>
+                    <p>Cost: ${device.cost}</p>
+                    <p>Last Activity: ${device.lastActivity}</p>
+                    <p>Status: ${device.status}</p>
+                    ${device.unknown ? '<p style="color: #ff6b6b;">⚠️ Unknown Device Detected</p>' : ''}
+                    <div style="margin-top: 1rem;">
+                        <button class="btn" style="padding: 0.5rem 1rem; margin-right: 0.5rem;" onclick="manageDevice('${device.serial}')">Manage</button>
+                        <button class="btn" style="padding: 0.5rem 1rem; background: linear-gradient(45deg, #ff6b6b, #ff8e53);" onclick="removeDevice('${device.serial}')">Remove</button>
+                    </div>
+                `;
+                devicesList.appendChild(deviceCard);
+            });
+            
+            // Update stats
+            const activeDevices = userDevices.filter(device => device.active).length;
+            document.querySelectorAll('.stat-value')[1].textContent = activeDevices;
+        }
+        
+        // Function to refresh devices
+        function refreshDevices() {
+            loadUserDevices();
+            alert('Device list refreshed.');
+        }
+        
+        // Function to manage device
+        function manageDevice(serial) {
+            alert('Managing device with serial: ' + serial);
+            // In a real application, this would open a detailed management page for the device
+        }
+        
+        // Function to remove device
+        function removeDevice(serial) {
+            if (confirm('Are you sure you want to remove this device?')) {
+                let userDevices = JSON.parse(localStorage.getItem('userDevices') || '[]');
+                userDevices = userDevices.filter(device => device.serial !== serial);
+                localStorage.setItem('userDevices', JSON.stringify(userDevices));
+                loadUserDevices();
+                alert('Device removed successfully.');
+            }
+        }
+
+        // Session timeout warning
+        setTimeout(() => {
+            if (userAccount.isAuthenticated && confirm('Your session will expire in 5 minutes. Do you want to extend it?')) {
+                console.log('Session extended');
+                userAccount.lastLogin = new Date();
+                localStorage.setItem('userAccount', JSON.stringify(userAccount));
+            } else if (userAccount.isAuthenticated) {
+                console.log('Session will expire');
+                userAccount.isAuthenticated = false;
+                userAccount.sessionToken = '';
+                localStorage.removeItem('userAccount');
+                alert('Your session has expired. Please login again.');
+                document.getElementById('accountContent').style.display = 'none';
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'block';
+            }
+        }, 25 * 60 * 1000); // 25 minutes
+    </script>
+</body>
+</html>

@@ -1,0 +1,1448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cellular Hub - My Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .header {
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav a:hover, .nav a.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .account-switcher {
+            position: relative;
+            margin-left: 1rem;
+        }
+
+        .switcher-button {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 15px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .switcher-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .avatar {
+            width: 24px;
+            height: 24px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+
+        .account-name {
+            margin-right: 5px;
+        }
+
+        .dropdown-icon {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid white;
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .dropdown-icon.open {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: 1000;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            min-width: 280px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            margin-top: 8px;
+        }
+
+        .dropdown-menu.open {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .current-account {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .current-account-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .current-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .current-account-details {
+            flex: 1;
+        }
+
+        .current-account-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .current-account-email {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        .account-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0;
+        }
+
+        .account-list-title {
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #4a90e2;
+        }
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            cursor: pointer;
+            transition: background 0.15s ease;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+        }
+
+        .account-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .account-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .account-info {
+            flex: 1;
+        }
+
+        .account-item-name {
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 0.2rem;
+        }
+
+        .account-item-email {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .add-account {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-top: 1px solid #f0f0f0;
+            color: #4a90e2;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+        .add-account:hover {
+            background: #f8f9fa;
+        }
+
+        .logout-option {
+            display: flex;
+            align-items: center;
+            padding: 12px 20px;
+            border-top: 1px solid #f0f0f0;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .logout-option:hover {
+            background: #f8f9fa;
+        }
+
+        .logout-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 107, 107, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .logout-icon::before {
+            content: '↪';
+            font-size: 1.2rem;
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .logout-text {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .dropdown-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 999;
+            display: none;
+        }
+
+        .dropdown-overlay.show {
+            display: block;
+        }
+
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .login-modal.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-modal-content {
+            background: white;
+            border-radius: 8px;
+            padding: 24px 32px;
+            width: 448px;
+            max-width: 90%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+
+        .login-modal.open .login-modal-content {
+            transform: translateY(0);
+        }
+
+        .login-modal-content h2 {
+            color: #202124;
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .login-modal-content .subtitle {
+            color: #5f6368;
+            font-size: 16px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .login-modal-content .form-group {
+            margin-bottom: 20px;
+        }
+
+        .login-modal-content .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #5f6368;
+            font-size: 14px;
+        }
+
+        .login-modal-content .form-group input {
+            width: 100%;
+            padding: 13px 15px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 16px;
+            color: #202124;
+            transition: border-color 0.2s ease;
+        }
+
+        .login-modal-content .form-group input:focus {
+            border-color: #4285f4;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+
+        .login-modal-content .form-group input::placeholder {
+            color: #9aa0a6;
+        }
+
+        .login-modal-content .btn {
+            width: 100%;
+            background: #4285f4;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .login-modal-content .btn:hover {
+            background: #3367d6;
+            box-shadow: 0 1px 2px 0 rgba(66, 133, 244, 0.3), 0 1px 3px 1px rgba(66, 133, 244, 0.15);
+        }
+
+        .add-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(0, 123, 255, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .add-icon::before {
+            content: '+';
+            font-size: 1.2rem;
+            color: #4a90e2;
+            font-weight: bold;
+        }
+
+        .add-text {
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            color: white;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+
+        .account-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .sidebar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            height: fit-content;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+        }
+
+        .menu-item {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .content-section {
+            display: none;
+            color: white;
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            color: white;
+        }
+
+        .profile-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .profile-details h2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-details p {
+            opacity: 0.8;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .order-info h4 {
+            margin-bottom: 0.5rem;
+        }
+
+        .order-status {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .status-completed {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .status-pending {
+            background: rgba(255, 193, 7, 0.3);
+            color: #ffc107;
+        }
+
+        .device-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .device-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .status-active {
+            background: rgba(76, 175, 80, 0.3);
+            color: #4caf50;
+        }
+
+        .connection-indicator {
+            position: fixed;
+            top: 20px;
+            right: 80px;
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            animation: pulse 2s infinite;
+            z-index: 5;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .member-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+        
+        .member-info strong {
+            color: #60a5fa;
+        }
+
+        .member-since {
+            font-size: 1.3em;
+            color: #60a5fa;
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(96, 165, 250, 0.1);
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        
+        .jakarta-time {
+            font-size: 1.1em;
+            opacity: 0.8;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .account-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                padding: 1rem;
+            }
+            
+            .nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="connection-indicator">🔒 Secure Connection</div>
+    
+    <header class="header">
+        <div class="logo">Cellular Hub</div>
+        <nav class="nav">
+            <a href="#" onclick="switchPage('home')">Home</a>
+            <a href="#" onclick="switchPage('shop')">Shop</a>
+            <a href="#" onclick="switchPage('support')">Support</a>
+            <a href="#" onclick="switchPage('account')" class="active">My Account</a>
+        </nav>
+        <div class="account-switcher">
+            <div class="switcher-button" id="switcherButton">
+                <div class="avatar" id="currentAvatar">A</div>
+                <span class="account-name" id="currentName">Adrian</span>
+                <span class="dropdown-icon"></span>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <div class="current-account">
+                    <div class="current-account-info">
+                        <div class="current-avatar" id="currentAccountAvatar">A</div>
+                        <div class="current-account-details">
+                            <div class="current-account-name" id="currentAccountName">Adrian</div>
+                            <div class="current-account-email" id="currentAccountEmail">adrian@example.com</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="account-list-title">Other Account</div>
+                <div class="account-list" id="accountList">
+                    <!-- Accounts will be populated by JavaScript -->
+                </div>
+                <div class="add-account" id="addAccount">
+                    <div class="add-icon"></div>
+                    <span class="add-text">Add Another Account</span>
+                </div>
+                <div class="logout-option" id="logoutOption">
+                    <div class="logout-icon"></div>
+                    <span class="logout-text">Logout</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Overlay untuk menutup dropdown -->
+    <div class="dropdown-overlay" id="dropdownOverlay" onclick="closeDropdown()"></div>
+
+    <div class="login-modal" id="loginModal">
+        <div class="login-modal-content">
+            <h2>Sign in</h2>
+            <div class="subtitle">to continue to Cellular Hub</div>
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <label for="loginName">Name</label>
+                    <input type="text" id="loginName" placeholder="Enter your name" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn">Next</button>
+            </form>
+        </div>
+    </div>
+    <div class="container">
+        <div class="account-grid">
+            <aside class="sidebar">
+                <h3>Account Menu</h3>
+                <a class="menu-item active" onclick="showSection('profile')">
+                    📱 Profile & Settings
+                </a>
+                <a class="menu-item" onclick="showSection('orders')">
+                    📦 Order History
+                </a>
+                <a class="menu-item" onclick="showSection('devices')">
+                    📲 Login History
+                </a>
+                <a class="menu-item" onclick="showSection('billing')">
+                    💳 Billing & Payment
+                </a>
+                <a class="menu-item" onclick="showSection('security')">
+                    🔐 Security & Privacy
+                </a>
+                <a class="menu-item" id="loginMenuItem" onclick="handleMenuLogin()">
+                    🔑 Login
+                </a>
+                <a class="menu-item" id="logoutMenuItem" onclick="handleLogout()" style="display: none;">
+                    🚪 Logout
+                </a>
+            </aside>
+
+            <main class="main-content">
+                <!-- Profile Section -->
+                <section id="profile" class="content-section active">
+                    <h1 class="section-title">Profile & Settings</h1>
+                    
+                    <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="profile-avatar">?</div>
+                        <div class="profile-details">
+                            <h2 id="profileName">New User</h2>
+                            <p id="profileEmail">email@example.com</p>
+                        </div>
+                    </div>
+                        
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value">12</div>
+                                <div class="stat-label">Total Orders</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Active Devices</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value">Rp 18,705,000</div>
+                                <div class="stat-label">Total Spent</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Removed Member Since section as per user request -->
+
+
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Personal Information</h3>
+                        <form onsubmit="updateProfile(event)">
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                                <div class="form-group">
+                                    <label>First Name</label>
+                                    <input type="text" id="firstName" value="Adrian" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Last Name</label>
+                                    <input type="text" id="lastName" value="" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Email Address</label>
+                                <input type="email" id="email" value="adrian@email.com" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Phone Number</label>
+                                <input type="tel" id="phone" value="+62 812-3456-7890" required>
+                            </div>
+                            <button type="submit" class="btn">Update Profile</button>
+                        </form>
+                    </div>
+                </section>
+
+                <!-- Orders Section -->
+                <section id="orders" class="content-section">
+                    <h1 class="section-title">Order History</h1>
+                    <p style="opacity: 0.8; margin-bottom: 1.5rem;">Your recent purchases from the shop will appear here.</p>
+                    
+                    <div class="order-item">
+                        <div class="order-info">
+                            <h4>No Recent Orders</h4>
+                            <p>Check back after making a purchase in the shop.</p>
+                        </div>
+                        <div class="order-status status-pending">N/A</div>
+                    </div>
+                </section>
+
+                <!-- Devices Section -->
+                <section id="devices" class="content-section">
+                    <h1 class="section-title">Login History</h1>
+                    
+                    <div class="device-card">
+                        <div class="device-header">
+                            <h4>Recent Login</h4>
+                            <div class="device-status status-active">Active</div>
+                        </div>
+                        <p>Device: Unknown Device</p>
+                        <p>Location: Jakarta, Indonesia</p>
+                        <p>Last Login: Today, time based on system clock</p>
+                    </div>
+                </section>
+
+                <!-- Billing Section -->
+                <section id="billing" class="content-section">
+                    <h1 class="section-title">Billing & Payment</h1>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Payment Methods</h3>
+                        <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p><strong>**** **** **** 4567</strong></p>
+                                    <p style="opacity: 0.8;">Expires 12/27</p>
+                                </div>
+                                <span style="background: rgba(76, 175, 80, 0.3); color: #4caf50; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Primary</span>
+                            </div>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.1); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <p><strong>QRIS Payment</strong></p>
+                                    <p style="opacity: 0.8;">Scan to pay</p>
+                                </div>
+                                <span style="background: rgba(76, 175, 80, 0.3); color: #4caf50; padding: 0.3rem 0.8rem; border-radius: 15px; font-size: 0.8rem;">Available</span>
+                            </div>
+                        </div>
+                        <button class="btn">Add Payment Method</button>
+                    </div>
+                </section>
+
+                <!-- Security Section -->
+                <section id="security" class="content-section">
+                    <h1 class="section-title">Security & Privacy</h1>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Account Security</h3>
+                        <div class="form-group">
+                            <label>Change Password</label>
+                            <input type="password" placeholder="Current Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                            <input type="password" placeholder="Confirm New Password">
+                        </div>
+                        <button class="btn">Update Password</button>
+                    </div>
+                    
+                    <div class="profile-card">
+                        <h3 style="margin-bottom: 1.5rem;">Two-Factor Authentication</h3>
+                        <p style="margin-bottom: 1rem; opacity: 0.8;">Enhance your account security with 2FA via SMS or app</p>
+                        <button class="btn">Setup 2FA</button>
+                    </div>
+                </section>
+
+                <!-- Removed Support Tickets section as per user request -->
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // Simulasi database pengguna
+        const userAccount = {
+            id: 'user_adrian_001',
+            firstName: 'Adrian',
+            lastName: '',
+            email: 'adrian@email.com',
+            phone: '+62 812-3456-7890',
+            memberSince: 'January 2023',
+            isAuthenticated: false, // Initially not authenticated
+            sessionToken: '',
+            lastLogin: new Date(),
+            preferences: {
+                theme: 'dark',
+                notifications: true,
+                twoFactor: false
+            }
+        };
+
+        // Fungsi untuk menampilkan section
+        function showSection(sectionName) {
+            // Sembunyikan semua section
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Hapus class active dari menu items
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            // Tampilkan section yang dipilih
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Tambahkan class active ke menu item yang diklik
+            event.target.classList.add('active');
+            
+            // Log aktivitas untuk tracking
+            console.log(`User ${userAccount.id} accessed ${sectionName} section`);
+        }
+
+        // Fungsi untuk update profile
+        function updateProfile(event) {
+            event.preventDefault();
+            
+            // Validasi session
+            if (!userAccount.isAuthenticated) {
+                alert('Session expired. Please login again.');
+                return;
+            }
+            
+            // Ambil data dari form
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            // Update user account object
+            userAccount.firstName = firstName;
+            userAccount.lastName = lastName;
+            userAccount.email = email;
+            userAccount.phone = phone;
+            
+            // Update tampilan
+            document.getElementById('userName').textContent = `${firstName} ${lastName}`;
+            document.getElementById('profileName').textContent = `${firstName} ${lastName}`;
+            document.getElementById('profileEmail').textContent = email;
+            
+            // Update avatar initials
+            const initials = firstName.charAt(0) + lastName.charAt(0);
+            document.getElementById('userAvatar').textContent = initials;
+            document.querySelector('.profile-avatar').textContent = initials;
+            
+            // Simulasi API call
+            setTimeout(() => {
+                alert('Profile updated successfully!');
+                console.log('User profile updated:', userAccount);
+            }, 500);
+        }
+
+        // Fungsi untuk switch page
+        function switchPage(page) {
+            if (page === 'account') {
+                return; // Sudah di halaman account
+            }
+            
+            // Navigasi ke halaman yang sesuai
+            console.log(`Navigating to ${page} page`);
+            if (page === 'home') {
+                window.location.href = 'index.html';
+            } else if (page === 'shop') {
+                window.location.href = 'shop.html';
+            } else if (page === 'support') {
+                window.location.href = 'support.html';
+            }
+        }
+
+        // Simulasi real-time connection monitoring
+        function checkConnection() {
+            const indicator = document.querySelector('.connection-indicator');
+            
+            // Simulasi check connection ke server
+            if (userAccount.isAuthenticated && userAccount.sessionToken) {
+                indicator.style.background = 'rgba(76, 175, 80, 0.9)';
+                indicator.innerHTML = '🔒 Secure Connection';
+            } else {
+                indicator.style.background = 'rgba(244, 67, 54, 0.9)';
+                indicator.innerHTML = '⚠️ Connection Lost';
+            }
+        }
+
+        // Auto-sync user data setiap 30 detik
+        function autoSync() {
+            console.log('Auto-syncing user data...');
+            
+            // Simulasi sync dengan server
+            fetch('/api/user/sync', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${userAccount.sessionToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userId: userAccount.id,
+                    lastSync: new Date().toISOString()
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('User data synced successfully');
+                } else {
+                    console.error('Sync failed');
+                }
+            })
+            .catch(error => {
+                console.error('Sync error:', error);
+            });
+        }
+
+        // Account Switcher functionality
+        let activeAccount = { id: 1, name: 'User', email: 'user@example.com', avatar: 'U', color: '#ff6b6b' };
+
+        function updateActiveAccount(name, email) {
+            activeAccount = {
+                id: 1,
+                name: name,
+                email: email,
+                avatar: name.charAt(0).toUpperCase(),
+                color: '#ff6b6b'
+            };
+            // Update button
+            document.getElementById('currentAvatar').textContent = activeAccount.avatar;
+            document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
+            document.getElementById('currentName').textContent = activeAccount.name;
+            // Update current account display in dropdown
+            document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
+            document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
+            document.getElementById('currentAccountName').textContent = activeAccount.name;
+            document.getElementById('currentAccountEmail').textContent = activeAccount.email;
+            // Update account list (empty since no predefined accounts)
+            renderAccountList();
+            // Update profile display
+            document.getElementById('profileName').textContent = activeAccount.name;
+            document.getElementById('profileEmail').textContent = activeAccount.email;
+            document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
+            document.getElementById('firstName').value = activeAccount.name.split(' ')[0];
+            document.getElementById('email').value = activeAccount.email;
+            // Update authentication status
+            userAccount.isAuthenticated = true;
+            userAccount.sessionToken = `user_token_${Math.random().toString(36).substring(2, 15)}`;
+            userAccount.lastLogin = new Date();
+            checkConnection();
+            alert(`Welcome, ${activeAccount.name}!`);
+        }
+
+        function renderAccountList() {
+            const accountList = document.getElementById('accountList');
+            accountList.innerHTML = '';
+            // No predefined accounts to list
+        }
+
+        function toggleDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownIcon = document.querySelector('.dropdown-icon');
+            const overlay = document.getElementById('dropdownOverlay');
+            
+            if (dropdownMenu.classList.contains('open')) {
+                closeDropdown();
+            } else {
+                dropdownMenu.classList.add('open');
+                dropdownIcon.classList.add('open');
+                overlay.classList.add('show');
+            }
+        }
+
+        function closeDropdown() {
+            const dropdownMenu = document.getElementById('dropdownMenu');
+            const dropdownIcon = document.querySelector('.dropdown-icon');
+            const overlay = document.getElementById('dropdownOverlay');
+            
+            dropdownMenu.classList.remove('open');
+            dropdownIcon.classList.remove('open');
+            overlay.classList.remove('show');
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            const name = document.getElementById('loginName').value;
+            const email = document.getElementById('loginEmail').value;
+            updateActiveAccount(name, email);
+            userAccount.email = email;
+            localStorage.setItem('userAccount', JSON.stringify(userAccount));
+            document.getElementById('loginModal').classList.remove('open');
+            updateMenuVisibility();
+        }
+
+        // Handle menu login
+        function handleMenuLogin() {
+            if (!userAccount.isAuthenticated) {
+                document.getElementById('loginModal').classList.add('open');
+            }
+        }
+
+        // Handle logout
+        function handleLogout() {
+            userAccount.isAuthenticated = false;
+            userAccount.sessionToken = '';
+            localStorage.setItem('userAccount', JSON.stringify(userAccount));
+            checkConnection();
+            updateMenuVisibility();
+            alert('You have been logged out successfully.');
+            window.location.href = 'index.html';
+        }
+
+        // Check login status on page load
+        function checkLoginStatus() {
+            const storedUser = localStorage.getItem('userAccount');
+            if (storedUser) {
+                const parsedUser = JSON.parse(storedUser);
+                if (parsedUser.isAuthenticated) {
+                    userAccount.isAuthenticated = true;
+                    userAccount.sessionToken = parsedUser.sessionToken;
+                    const account = accounts.find(acc => acc.email === parsedUser.email);
+                    if (account) {
+                        updateActiveAccount(account);
+                    }
+                } else {
+                    document.getElementById('loginModal').classList.add('open');
+                    alert('You must log in to access My Account.');
+                }
+            } else {
+                document.getElementById('loginModal').classList.add('open');
+                alert('You must log in to access My Account.');
+            }
+            updateMenuVisibility();
+        }
+
+        // Update menu visibility based on authentication status
+        function updateMenuVisibility() {
+            const loginMenuItem = document.getElementById('loginMenuItem');
+            const logoutMenuItem = document.getElementById('logoutMenuItem');
+            if (userAccount.isAuthenticated) {
+                loginMenuItem.style.display = 'none';
+                logoutMenuItem.style.display = 'block';
+            } else {
+                loginMenuItem.style.display = 'block';
+                logoutMenuItem.style.display = 'none';
+            }
+        }
+
+        // Initialize aplikasi
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize account switcher
+            renderAccountList();
+            document.getElementById('switcherButton').addEventListener('click', toggleDropdown);
+            document.getElementById('addAccount').addEventListener('click', () => {
+                document.getElementById('loginModal').classList.add('open');
+                closeDropdown();
+            });
+            document.getElementById('logoutOption').addEventListener('click', () => {
+                handleLogout();
+                closeDropdown();
+            });
+            // Close dropdown when pressing ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeDropdown();
+                }
+            });
+
+            // Check login status
+            checkLoginStatus();
+            
+            // Load user data
+            const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+            document.getElementById('userName').textContent = fullName;
+            document.getElementById('profileName').textContent = fullName;
+            document.getElementById('profileEmail').textContent = userAccount.email;
+            
+            const initials = userAccount.firstName.charAt(0) + (userAccount.lastName ? userAccount.lastName.charAt(0) : '');
+            document.getElementById('userAvatar').textContent = initials;
+            document.querySelector('.profile-avatar').textContent = initials;
+            
+            // Start monitoring
+            checkConnection();
+            setInterval(checkConnection, 5000);
+            setInterval(autoSync, 30000);
+            updateMemberSinceDate();
+            // Update every day (86400000 milliseconds)
+            setInterval(updateMemberSinceDate, 86400000);
+            updateMemberSinceJakarta();
+            // Auto update setiap detik
+            setInterval(updateMemberSinceJakarta, 1000);
+            
+            console.log('Cellular Hub My Account loaded for user:', userAccount.id);
+            console.log('Welcome back, Adrian!');
+        });
+
+        // Event listeners untuk menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+        
+        // Initialize aplikasi
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize account switcher
+            renderAccountList();
+            document.getElementById('switcherButton').addEventListener('click', toggleDropdown);
+            document.getElementById('addAccount').addEventListener('click', () => {
+                alert('Add new account functionality would be implemented here');
+                closeDropdown();
+            });
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                const switcher = document.querySelector('.account-switcher');
+                if (!switcher.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+
+            // User sudah login, langsung load data
+            console.log('User Adrian sudah login sebelumnya');
+            
+            // Load user data
+            const fullName = userAccount.lastName ? `${userAccount.firstName} ${userAccount.lastName}` : userAccount.firstName;
+            document.getElementById('userName').textContent = fullName;
+            document.getElementById('profileName').textContent = fullName;
+            document.getElementById('profileEmail').textContent = userAccount.email;
+            
+            const initials = userAccount.firstName.charAt(0) + (userAccount.lastName ? userAccount.lastName.charAt(0) : '');
+            document.getElementById('userAvatar').textContent = initials;
+            document.querySelector('.profile-avatar').textContent = initials;
+            
+            // Start monitoring
+            checkConnection();
+            setInterval(checkConnection, 5000);
+            setInterval(autoSync, 30000);
+            
+            
+            console.log('Cellular Hub My Account loaded for user:', userAccount.id);
+            console.log('Welcome back, Adrian!');
+        });
+
+        // Event listeners untuk menu items
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active class from all menu items
+                document.querySelectorAll('.menu-item').forEach(menuItem => {
+                    menuItem.classList.remove('active');
+                });
+                
+                // Add active class to clicked item
+                this.classList.add('active');
+            });
+        });
+
+
+        // Function to update Member Since date with Jakarta timezone
+        function updateMemberSinceDate() {
+            const now = new Date();
+            const formatter = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Jakarta',
+                year: 'numeric',
+                month: 'long'
+            });
+            const memberSinceText = `Member since ${formatter.format(now)}`;
+            const memberSinceElement = document.getElementById('memberSince');
+            if (memberSinceElement) {
+                memberSinceElement.textContent = memberSinceText;
+            }
+        }
+
+        // Tanggal bergabung member - otomatis menggunakan tanggal hari ini
+        const JOIN_DATE = new Date(); // Menggunakan tanggal hari ini sebagai tanggal bergabung
+        
+        function updateMemberSinceJakarta() {
+            // Format member since dengan zona waktu Jakarta - otomatis update
+            const jakartaFormatter = new Intl.DateTimeFormat('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                year: 'numeric',
+                month: 'long'
+            });
+            
+            const memberSinceText = jakartaFormatter.format(JOIN_DATE);
+            
+            // Update kedua elemen member since
+            const profileMemberSinceElement = document.getElementById('profile-member-since');
+            if (profileMemberSinceElement) {
+                profileMemberSinceElement.textContent = `Member since ${memberSinceText}`;
+            }
+            const memberSinceDisplayElement = document.getElementById('member-since-display');
+            if (memberSinceDisplayElement) {
+                memberSinceDisplayElement.textContent = `Member since ${memberSinceText}`;
+            }
+            
+            // Update waktu Jakarta lengkap dengan hari, tanggal, bulan, tahun, dan jam
+            const now = new Date();
+            const currentJakartaTime = new Intl.DateTimeFormat('id-ID', {
+                timeZone: 'Asia/Jakarta',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: false
+            }).format(now);
+            
+            const jakartaTimeElement = document.getElementById('jakarta-time-display');
+            if (jakartaTimeElement) {
+                jakartaTimeElement.textContent = currentJakartaTime;
+            }
+        }
+
+        // Session timeout warning
+        setTimeout(() => {
+            if (confirm('Your session will expire in 5 minutes. Do you want to extend it?')) {
+                console.log('Session extended');
+                userAccount.lastLogin = new Date();
+            } else {
+                console.log('Session will expire');
+            }
+        }, 25 * 60 * 1000); // 25 minutes
+    </script>
+</body>
+</html>

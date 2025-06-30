@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - Cellular Hub</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Inter:400,500,600,700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header__container">
+            <div class="header__logo">Cellular Hub</div>
+            <nav class="header__nav">
+                <a href="index.html">Home</a>
+                <a href="shop.html">Shop</a>
+                <a href="support.html">Support</a>
+                <a href="cart.html" style="color: white;">Cart</a>
+                <a href="#" onclick="checkLoginStatus()">My Account</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="hero-section" style="background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%); color: white; padding: 60px 40px; border-radius: 20px; margin-bottom: 40px; text-align: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);">
+            <h2 style="font-size: 2.8rem; margin-bottom: 15px; background: linear-gradient(45deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Your Shopping Cart</h2>
+            <p style="font-size: 1.3rem; opacity: 0.9;">Review your selected items and proceed to checkout.</p>
+        </div>
+
+        <div class="stats-section" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 20px; border-radius: 15px; margin-bottom: 30px; text-align: center;">
+            <div class="stats-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px;">
+                <div class="stat-item" style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                    <span class="stat-number" id="totalItems" style="font-size: 2rem; font-weight: bold; display: block;">0</span>
+                    <span class="stat-label" style="font-size: 0.9rem; opacity: 0.9;">Items in Cart</span>
+                </div>
+                <div class="stat-item" style="padding: 15px; border-radius: 10px; background: linear-gradient(135deg, #667eea, #764ba2); color: white;">
+                    <span class="stat-number" id="totalPrice" style="font-size: 2rem; font-weight: bold; display: block;">Rp 0</span>
+                    <span class="stat-label" style="font-size: 0.9rem; opacity: 0.9;">Total Price</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="phones-grid" id="cartItemsContainer" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; margin-top: 30px;">
+            <!-- Cart items will be dynamically loaded here -->
+        </div>
+        <div style="text-align: center; margin-top: 30px;">
+            <button onclick="proceedToCheckout()" style="background: linear-gradient(135deg, #4ecdc4, #44a08d); color: white; border: none; padding: 15px 30px; border-radius: 10px; cursor: pointer; font-size: 1.2rem; font-weight: 600; transition: all 0.3s ease;">Proceed to Checkout</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__links">
+            <a href="about.html">About Us</a>
+            <a href="contact.html">Contact</a>
+            <a href="privacy.html">Privacy Policy</a>
+            <a href="terms.html">Terms of Service</a>
+        </div>
+        <div class="footer__copyright">
+            <div class="footer__socials">
+                <img src="assets/twitter.png" alt="Twitter">
+                <img src="assets/facebook.png" alt="Facebook">
+                <img src="assets/instagram.png" alt="Instagram">
+            </div>
+            <span>&copy;2024 Cellular Hub. All rights reserved.</span>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script>
+    function checkLoginStatus() {
+      const storedUser = localStorage.getItem('userAccount');
+      if (storedUser) {
+        const user = JSON.parse(storedUser);
+        if (user.isAuthenticated) {
+          window.location.href = 'myaccount.html';
+        } else {
+          alert('Your session has expired. Please log in again.');
+          window.location.href = 'myaccount.html?login=true';
+        }
+      } else {
+        alert('Your session has expired. Please log in again.');
+        window.location.href = 'myaccount.html?login=true';
+      }
+    }
+
+    // Format currency
+    function formatPrice(price) {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0
+        }).format(price);
+    }
+
+    // Render cart items
+    function renderCartItems() {
+        const container = document.getElementById('cartItemsContainer');
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        if (cart.length === 0) {
+            container.innerHTML = '<div style="text-align: center; padding: 40px; color: #4a5568;"><h3>Your cart is empty</h3></div>';
+            document.getElementById('totalItems').textContent = '0';
+            document.getElementById('totalPrice').textContent = formatPrice(0);
+            return;
+        }
+
+        let total = 0;
+        let totalItems = 0;
+        const cartItems = cart.map(item => {
+            const itemTotal = item.price * item.quantity;
+            total += itemTotal;
+            totalItems += item.quantity;
+            return `
+                <div class="phone-card" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 20px; padding: 25px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.2);">
+                    <div class="phone-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                        <div class="phone-name" style="font-size: 1.4rem; font-weight: bold; color: #2d3748;">${item.name}</div>
+                        <div class="phone-price" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold; font-size: 0.9rem;">${formatPrice(itemTotal)}</div>
+                    </div>
+                    <div class="phone-specs" style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                        <div class="spec-item" style="display: flex; flex-direction: column;">
+                            <div class="spec-label" style="font-size: 0.8rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">Quantity</div>
+                            <div class="spec-value" style="font-weight: 600; color: #2d3748; font-size: 0.95rem;">${item.quantity}</div>
+                        </div>
+                        <div class="spec-item" style="display: flex; flex-direction: column;">
+                            <div class="spec-label" style="font-size: 0.8rem; color: #718096; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 5px;">Price per Item</div>
+                            <div class="spec-value" style="font-weight: 600; color: #2d3748; font-size: 0.95rem;">${formatPrice(item.price)}</div>
+                        </div>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="removeFromCart('${item.name}')" style="background: linear-gradient(135deg, #ff6b6b, #ee5253); color: white; border: none; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-size: 1rem; font-weight: 500; transition: all 0.3s ease;">Remove from Cart</button>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = cartItems;
+        document.getElementById('totalItems').textContent = totalItems;
+        document.getElementById('totalPrice').textContent = formatPrice(total);
+    }
+
+    // Function to remove item from cart
+    function removeFromCart(name) {
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const index = cart.findIndex(item => item.name === name);
+        if (index !== -1) {
+            if (cart[index].quantity > 1) {
+                cart[index].quantity -= 1;
+            } else {
+                cart.splice(index, 1);
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert(`${name} has been removed from your cart!`);
+            renderCartItems();
+        }
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+        renderCartItems();
+    });
+
+    // Function to proceed to checkout
+    function proceedToCheckout() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        if (cart.length === 0) {
+            alert('Your cart is empty. Please add items before proceeding to checkout.');
+        } else {
+            alert('Proceeding to checkout. You will be redirected to the payment page.');
+            // Here you would redirect to a checkout page or payment gateway
+            // For now, we'll just simulate a redirect
+            window.location.href = 'checkout.html';
+        }
+    }
+    </script>
+</body>
+</html>

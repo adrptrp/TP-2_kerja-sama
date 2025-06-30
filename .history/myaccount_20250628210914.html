@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Switcher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ff6b6b, #4ecdc4, #45b7d1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .avatar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .username {
+            color: white;
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .account-switcher {
+            position: relative;
+            display: inline-block;
+        }
+
+        .switch-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .switch-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .switch-btn:hover::before {
+            left: 100%;
+        }
+
+        .switch-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .switch-btn:active {
+            transform: translateY(0);
+        }
+
+        .dropdown-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .switch-btn.active .dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 300px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            opacity: 0;
+            transform: translateY(-10px);
+            visibility: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .dropdown.show {
+            opacity: 1;
+            transform: translateY(0);
+            visibility: visible;
+        }
+
+        .dropdown-header {
+            padding: 20px 20px 10px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .current-account {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .current-account .avatar {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+
+        .account-details h3 {
+            color: #333;
+            font-size: 18px;
+            margin-bottom: 4px;
+        }
+
+        .account-details p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .account-list {
+            padding: 10px 0;
+        }
+
+        .account-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .account-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .account-item .avatar {
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+        }
+
+        .account-item .account-details h4 {
+            color: #333;
+            font-size: 16px;
+            margin-bottom: 2px;
+        }
+
+        .account-item .account-details p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        .add-account {
+            margin: 10px 20px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            width: calc(100% - 40px);
+            transition: all 0.3s ease;
+        }
+
+        .add-account:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Demo content to show transparency effect */
+        .demo-content {
+            margin-top: 40px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .demo-content h2 {
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .demo-content p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Overlay for when dropdown is open */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="user-info">
+            <div class="avatar">A</div>
+            <div class="username">Adrian</div>
+        </div>
+        
+        <div class="account-switcher">
+            <button class="switch-btn" onclick="toggleDropdown()">
+                Switch Account
+                <span class="dropdown-arrow">▼</span>
+            </button>
+            
+            <div class="dropdown" id="dropdown">
+                <div class="dropdown-header">
+                    <div class="current-account">
+                        <div class="avatar">A</div>
+                        <div class="account-details">
+                            <h3>Adrian</h3>
+                            <p>adrian@email.com</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="account-list">
+                    <button class="account-item" onclick="switchAccount('John', 'john@email.com', 'J')">
+                        <div class="avatar" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">J</div>
+                        <div class="account-details">
+                            <h4>John Doe</h4>
+                            <p>john@email.com</p>
+                        </div>
+                    </button>
+                    
+                    <button class="account-item" onclick="switchAccount('Sarah', 'sarah@gmail.com', 'S')">
+                        <div class="avatar" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">S</div>
+                        <div class="account-details">
+                            <h4>Sarah Wilson</h4>
+                            <p>sarah@gmail.com</p>
+                        </div>
+                    </button>
+                    
+                    <button class="account-item" onclick="switchAccount('Mike', 'mike@company.com', 'M')">
+                        <div class="avatar" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);">M</div>
+                        <div class="account-details">
+                            <h4>Mike Johnson</h4>
+                            <p>mike@company.com</p>
+                        </div>
+                    </button>
+                </div>
+                
+                <button class="add-account" onclick="addAccount()">
+                    + Add Another Account
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="demo-content">
+        <h2>Demo Content</h2>
+        <p>Ini adalah konten demo untuk menunjukkan bahwa dropdown account switcher tidak transparan dan tidak mengganggu visibilitas konten di belakangnya. Ketika dropdown terbuka, konten ini tetap terlihat jelas tanpa terganggu oleh transparansi dropdown.</p>
+        <p>Dropdown menggunakan backdrop-filter dan background yang solid untuk memastikan nama-nama akun terlihat jelas dan mudah dibaca.</p>
+    </div>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="closeDropdown()"></div>
+
+    <script>
+        function toggleDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            const overlay = document.getElementById('overlay');
+            const switchBtn = document.querySelector('.switch-btn');
+            
+            if (dropdown.classList.contains('show')) {
+                closeDropdown();
+            } else {
+                dropdown.classList.add('show');
+                overlay.classList.add('show');
+                switchBtn.classList.add('active');
+            }
+        }
+
+        function closeDropdown() {
+            const dropdown = document.getElementById('dropdown');
+            const overlay = document.getElementById('overlay');
+            const switchBtn = document.querySelector('.switch-btn');
+            
+            dropdown.classList.remove('show');
+            overlay.classList.remove('show');
+            switchBtn.classList.remove('active');
+        }
+
+        function switchAccount(name, email, initial) {
+            // Update current user info
+            document.querySelector('.username').textContent = name;
+            document.querySelector('.user-info .avatar').textContent = initial;
+            document.querySelector('.current-account h3').textContent = name;
+            document.querySelector('.current-account p').textContent = email;
+            
+            // Close dropdown
+            closeDropdown();
+            
+            // Show notification (optional)
+            console.log(`Switched to account: ${name} (${email})`);
+        }
+
+        function addAccount() {
+            alert('Feature untuk menambah akun baru akan segera tersedia!');
+            closeDropdown();
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const switcher = document.querySelector('.account-switcher');
+            if (!switcher.contains(event.target)) {
+                closeDropdown();
+            }
+        });
+
+        // Close dropdown with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDropdown();
+            }
+        });
+    </script>
+</body>
+</html>

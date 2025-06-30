@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Account - Cellular Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #6B73FF 0%, #9BAAFB 50%, #C8B5FF 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 25px 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .account-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            padding: 40px 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .account-title {
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 35px;
+            text-align: left;
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .menu-item {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(8px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .menu-link {
+            display: flex;
+            align-items: center;
+            padding: 20px 25px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .menu-text {
+            flex: 1;
+        }
+
+        .menu-arrow {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+            transition: all 0.3s ease;
+            transform: translateX(-5px);
+        }
+
+        .menu-item:hover .menu-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Icon colors for each menu item */
+        .profile-icon { color: #8B9FFF; }
+        .order-icon { color: #FF8B8B; }
+        .devices-icon { color: #8BFFA8; }
+        .billing-icon { color: #8BFFEF; }
+        .security-icon { color: #FFD68B; }
+        .support-icon { color: #C8B5FF; }
+        .logout-icon { color: #FF9F8B; }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .back-icon {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 20px 25px;
+            }
+
+            .header h1 {
+                font-size: 1.7rem;
+            }
+
+            .account-container {
+                padding: 30px 25px;
+            }
+
+            .account-title {
+                font-size: 1.5rem;
+                margin-bottom: 25px;
+            }
+
+            .menu-link {
+                padding: 18px 20px;
+                font-size: 1rem;
+            }
+
+            .menu-icon {
+                margin-right: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+
+            .account-container {
+                padding: 25px 20px;
+            }
+
+            .menu-link {
+                padding: 16px 18px;
+            }
+        }
+
+        /* Smooth loading animation */
+        .menu-item {
+            opacity: 0;
+            animation: slideInUp 0.6s ease forwards;
+        }
+
+        .menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .menu-item:nth-child(3) { animation-delay: 0.3s; }
+        .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .menu-item:nth-child(5) { animation-delay: 0.5s; }
+        .menu-item:nth-child(6) { animation-delay: 0.6s; }
+        .menu-item:nth-child(7) { animation-delay: 0.7s; }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔱 Cellular Hub</h1>
+        </div>
+
+        <a href="#" class="back-button" onclick="goBack()">
+            <span class="back-icon">←</span>
+            Back to Home
+        </a>
+
+        <div class="account-container">
+            <h2 class="account-title">Account Menu</h2>
+
+            <ul class="menu-list">
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('profile')">
+                        <span class="menu-icon profile-icon">👤</span>
+                        <span class="menu-text">Profile & Settings</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('orders')">
+                        <span class="menu-icon order-icon">📋</span>
+                        <span class="menu-text">Order History</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('devices')">
+                        <span class="menu-icon devices-icon">📱</span>
+                        <span class="menu-text">My Devices</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('billing')">
+                        <span class="menu-icon billing-icon">💳</span>
+                        <span class="menu-text">Billing & Payment</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('security')">
+                        <span class="menu-icon security-icon">🔒</span>
+                        <span class="menu-text">Security & Privacy</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="navigateTo('support')">
+                        <span class="menu-icon support-icon">🎧</span>
+                        <span class="menu-text">Support Tickets</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="#" class="menu-link" onclick="confirmLogout()">
+                        <span class="menu-icon logout-icon">🚪</span>
+                        <span class="menu-text">Logout</span>
+                        <span class="menu-arrow">→</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Navigation functions
+        function navigateTo(section) {
+            // Add loading animation
+            document.body.style.opacity = '0.8';
+            
+            setTimeout(() => {
+                switch(section) {
+                    case 'profile':
+                        showNotification('Navigating to Profile & Settings...', 'info');
+                        // window.location.href = 'profile.html';
+                        break;
+                    case 'orders':
+                        showNotification('Loading Order History...', 'info');
+                        // window.location.href = 'orders.html';
+                        break;
+                    case 'devices':
+                        showNotification('Opening My Devices...', 'info');
+                        // window.location.href = 'devices.html';
+                        break;
+                    case 'billing':
+                        showNotification('Accessing Billing & Payment...', 'info');
+                        // window.location.href = 'billing.html';
+                        break;
+                    case 'security':
+                        showNotification('Opening Security Settings...', 'info');
+                        // window.location.href = 'security.html';
+                        break;
+                    case 'support':
+                        showNotification('Loading Support Center...', 'info');
+                        // window.location.href = 'support.html';
+                        break;
+                }
+                document.body.style.opacity = '1';
+            }, 300);
+        }
+
+        function goBack() {
+            showNotification('Returning to homepage...', 'info');
+            setTimeout(() => {
+                // window.location.href = 'index.html';
+                window.history.back();
+            }, 500);
+        }
+
+        function confirmLogout() {
+            if (confirm('Are you sure you want to logout?')) {
+                showNotification('Logging out...', 'warning');
+                setTimeout(() => {
+                    // window.location.href = 'login.html';
+                    showNotification('Logged out successfully!', 'success');
+                }, 1000);
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Remove existing notifications
+            const existing = document.querySelector('.notification');
+            if (existing) {
+                existing.remove();
+            }
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <div style="
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(255, 255, 255, 0.9);
+                    backdrop-filter: blur(10px);
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    border-radius: 15px;
+                    padding: 15px 20px;
+                    color: #333;
+                    font-weight: 500;
+                    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                    z-index: 1000;
+                    animation: slideInRight 0.3s ease;
+                ">
+                    ${message}
+                </div>
+            `;
+
+            document.body.appendChild(notification);
+
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.animation = 'slideOutRight 0.3s ease';
+                    setTimeout(() => {
+                        notification.remove();
+                    }, 300);
+                }
+            }, 3000);
+        }
+
+        // Add CSS animations for notifications
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideInRight {
+                from {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+            }
+
+            @keyframes slideOutRight {
+                from {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translateX(100px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add subtle parallax effect
+            window.addEventListener('scroll', function() {
+                const scrolled = window.pageYOffset;
+                const parallax = document.querySelector('.container');
+                const speed = scrolled * 0.5;
+                parallax.style.transform = `translateY(${speed}px)`;
+            });
+
+            // Add touch feedback for mobile
+            if ('ontouchstart' in window) {
+                document.querySelectorAll('.menu-item').forEach(item => {
+                    item.addEventListener('touchstart', function() {
+                        this.style.transform = 'scale(0.98)';
+                    });
+                    
+                    item.addEventListener('touchend', function() {
+                        this.style.transform = 'scale(1)';
+                    });
+                });
+            }
+        });
+    </script>
+</body>
+</html>
