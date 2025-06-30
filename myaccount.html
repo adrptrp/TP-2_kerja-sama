@@ -856,15 +856,15 @@
                         
                         <div class="stats-grid">
                             <div class="stat-card">
-                                <div class="stat-value">12</div>
+                                <div class="stat-value" id="totalOrders">0</div>
                                 <div class="stat-label">Total Orders</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-value">3</div>
+                                <div class="stat-value" id="activeDevices">0</div>
                                 <div class="stat-label">Active Devices</div>
                             </div>
                             <div class="stat-card">
-                                <div class="stat-value">Rp 18,705,000</div>
+                                <div class="stat-value" id="totalSpent">Rp 0</div>
                                 <div class="stat-label">Total Spent</div>
                             </div>
                         </div>
@@ -1167,6 +1167,7 @@
             userAccount.sessionToken = `user_token_${Math.random().toString(36).substring(2, 15)}`;
             userAccount.lastLogin = new Date();
             checkConnection();
+            updateStats();
             alert(`Welcome, ${activeAccount.name}!`);
         }
 
@@ -1217,6 +1218,7 @@
             userAccount.email = activeAccount.email;
             localStorage.setItem('userAccount', JSON.stringify(userAccount));
             checkConnection();
+            updateStats();
             alert(`Switched to ${activeAccount.name}'s account`);
         }
 
@@ -1314,6 +1316,7 @@
                         document.getElementById('firstName').value = activeAccount.name.split(' ')[0];
                         document.getElementById('email').value = activeAccount.email;
                         checkConnection();
+                        updateStats();
                     }
                 } else {
                     document.getElementById('loginModal').classList.add('open');
@@ -1337,6 +1340,18 @@
                 loginMenuItem.style.display = 'block';
                 logoutMenuItem.style.display = 'none';
             }
+        }
+
+        // Update statistics based on user data
+        function updateStats() {
+            // Total Orders - Placeholder for checkout-payment data
+            document.getElementById('totalOrders').textContent = '0';
+            
+            // Active Devices - Based on number of accounts
+            document.getElementById('activeDevices').textContent = accountsList.length;
+            
+            // Total Spent - Placeholder for checkout-payment data
+            document.getElementById('totalSpent').textContent = 'Rp 0';
         }
 
         // Initialize aplikasi
