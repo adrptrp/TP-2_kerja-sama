@@ -1126,15 +1126,25 @@
 
         // Account Switcher functionality
         let activeAccount = { id: 1, name: 'User', email: 'user@example.com', avatar: 'U', color: '#ff6b6b' };
+        let accountsList = JSON.parse(localStorage.getItem('accountsList')) || [];
 
         function updateActiveAccount(name, email) {
-            activeAccount = {
-                id: 1,
-                name: name,
-                email: email,
-                avatar: name.charAt(0).toUpperCase(),
-                color: '#ff6b6b'
-            };
+            // Check if account already exists
+            let account = accountsList.find(acc => acc.email === email);
+            if (!account) {
+                // Generate a unique ID for new account
+                const newId = accountsList.length > 0 ? Math.max(...accountsList.map(acc => acc.id)) + 1 : 1;
+                account = {
+                    id: newId,
+                    name: name,
+                    email: email,
+                    avatar: name.charAt(0).toUpperCase(),
+                    color: getRandomColor()
+                };
+                accountsList.push(account);
+                localStorage.setItem('accountsList', JSON.stringify(accountsList));
+            }
+            activeAccount = account;
             // Update button
             document.getElementById('currentAvatar').textContent = activeAccount.avatar;
             document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
@@ -1144,7 +1154,7 @@
             document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
             document.getElementById('currentAccountName').textContent = activeAccount.name;
             document.getElementById('currentAccountEmail').textContent = activeAccount.email;
-            // Update account list (empty since no predefined accounts)
+            // Update account list
             renderAccountList();
             // Update profile display
             document.getElementById('profileName').textContent = activeAccount.name;
@@ -1163,7 +1173,60 @@
         function renderAccountList() {
             const accountList = document.getElementById('accountList');
             accountList.innerHTML = '';
-            // No predefined accounts to list
+            accountsList.filter(acc => acc.id !== activeAccount.id).forEach(account => {
+                const item = document.createElement('button');
+                item.className = 'account-item';
+                item.innerHTML = `
+                    <div class="account-avatar" style="background-color: ${account.color}">${account.avatar}</div>
+                    <div class="account-info">
+                        <div class="account-item-name">${account.name}</div>
+                        <div class="account-item-email">${account.email}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => {
+                    switchToAccount(account);
+                    closeDropdown();
+                });
+                accountList.appendChild(item);
+            });
+        }
+
+        function switchToAccount(account) {
+            activeAccount = account;
+            // Update button
+            document.getElementById('currentAvatar').textContent = activeAccount.avatar;
+            document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
+            document.getElementById('currentName').textContent = activeAccount.name;
+            // Update current account display in dropdown
+            document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
+            document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
+            document.getElementById('currentAccountName').textContent = activeAccount.name;
+            document.getElementById('currentAccountEmail').textContent = activeAccount.email;
+            // Update account list
+            renderAccountList();
+            // Update profile display
+            document.getElementById('profileName').textContent = activeAccount.name;
+            document.getElementById('profileEmail').textContent = activeAccount.email;
+            document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
+            document.getElementById('firstName').value = activeAccount.name.split(' ')[0];
+            document.getElementById('email').value = activeAccount.email;
+            // Update authentication status
+            userAccount.isAuthenticated = true;
+            userAccount.sessionToken = `user_token_${Math.random().toString(36).substring(2, 15)}`;
+            userAccount.lastLogin = new Date();
+            userAccount.email = activeAccount.email;
+            localStorage.setItem('userAccount', JSON.stringify(userAccount));
+            checkConnection();
+            alert(`Switched to ${activeAccount.name}'s account`);
+        }
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
         }
 
         function toggleDropdown() {
@@ -1223,14 +1286,34 @@
         // Check login status on page load
         function checkLoginStatus() {
             const storedUser = localStorage.getItem('userAccount');
+            accountsList = JSON.parse(localStorage.getItem('accountsList')) || [];
             if (storedUser) {
                 const parsedUser = JSON.parse(storedUser);
-                if (parsedUser.isAuthenticated) {
+                if (parsedUser.isAuthenticated && accountsList.length > 0) {
                     userAccount.isAuthenticated = true;
                     userAccount.sessionToken = parsedUser.sessionToken;
-                    const account = accounts.find(acc => acc.email === parsedUser.email);
+                    userAccount.email = parsedUser.email;
+                    const account = accountsList.find(acc => acc.email === parsedUser.email);
                     if (account) {
-                        updateActiveAccount(account);
+                        activeAccount = account;
+                        // Update button
+                        document.getElementById('currentAvatar').textContent = activeAccount.avatar;
+                        document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
+                        document.getElementById('currentName').textContent = activeAccount.name;
+                        // Update current account display in dropdown
+                        document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
+                        document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
+                        document.getElementById('currentAccountName').textContent = activeAccount.name;
+                        document.getElementById('currentAccountEmail').textContent = activeAccount.email;
+                        // Update account list
+                        renderAccountList();
+                        // Update profile display
+                        document.getElementById('profileName').textContent = activeAccount.name;
+                        document.getElementById('profileEmail').textContent = activeAccount.email;
+                        document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
+                        document.getElementById('firstName').value = activeAccount.name.split(' ')[0];
+                        document.getElementById('email').value = activeAccount.email;
+                        checkConnection();
                     }
                 } else {
                     document.getElementById('loginModal').classList.add('open');
