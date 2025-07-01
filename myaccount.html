@@ -783,11 +783,7 @@
                 </div>
                 <div class="logout-option" id="logoutOption">
                     <div class="logout-icon"></div>
-                    <span class="logout-text">Logout Current Account</span>
-                </div>
-                <div class="logout-option" id="logoutAllOption" style="border-top: 1px solid #f0f0f0;">
-                    <div class="logout-icon"></div>
-                    <span class="logout-text">Logout All Accounts</span>
+                    <span class="logout-text">Logout</span>
                 </div>
             </div>
         </div>
@@ -1279,12 +1275,17 @@
         }
 
         // Handle logout
-        function handleLogout(logoutAll = false) {
+        function handleLogout() {
             userAccount.isAuthenticated = false;
             userAccount.sessionToken = '';
-            if (logoutAll) {
-                accountsList = [];
-                localStorage.setItem('accountsList', JSON.stringify(accountsList));
+            // Remove the current account from the list if it exists
+            accountsList = accountsList.filter(acc => acc.id !== activeAccount.id);
+            localStorage.setItem('accountsList', JSON.stringify(accountsList));
+            if (accountsList.length > 0) {
+                // Switch to the first available account
+                switchToAccount(accountsList[0]);
+                alert(`You have been logged out from ${activeAccount.name}'s account. Switched to another account.`);
+            } else {
                 activeAccount = { id: 0, name: 'Guest', email: 'guest@example.com', avatar: 'G', color: '#ff6b6b' };
                 // Update button
                 document.getElementById('currentAvatar').textContent = activeAccount.avatar;
@@ -1301,34 +1302,7 @@
                 document.getElementById('profileName').textContent = activeAccount.name;
                 document.getElementById('profileEmail').textContent = activeAccount.email;
                 document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
-                alert('You have been logged out from all accounts successfully.');
-            } else {
-                // Remove the current account from the list if it exists
-                accountsList = accountsList.filter(acc => acc.id !== activeAccount.id);
-                localStorage.setItem('accountsList', JSON.stringify(accountsList));
-                if (accountsList.length > 0) {
-                    // Switch to the first available account
-                    switchToAccount(accountsList[0]);
-                    alert(`You have been logged out from ${activeAccount.name}'s account. Switched to another account.`);
-                } else {
-                    activeAccount = { id: 0, name: 'Guest', email: 'guest@example.com', avatar: 'G', color: '#ff6b6b' };
-                    // Update button
-                    document.getElementById('currentAvatar').textContent = activeAccount.avatar;
-                    document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
-                    document.getElementById('currentName').textContent = activeAccount.name;
-                    // Update current account display in dropdown
-                    document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
-                    document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
-                    document.getElementById('currentAccountName').textContent = activeAccount.name;
-                    document.getElementById('currentAccountEmail').textContent = activeAccount.email;
-                    // Update account list
-                    renderAccountList();
-                    // Update profile display
-                    document.getElementById('profileName').textContent = activeAccount.name;
-                    document.getElementById('profileEmail').textContent = activeAccount.email;
-                    document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
-                    alert(`You have been logged out from ${activeAccount.name}'s account.`);
-                }
+                alert(`You have been logged out from ${activeAccount.name}'s account.`);
             }
             localStorage.setItem('userAccount', JSON.stringify(userAccount));
             checkConnection();
@@ -1415,13 +1389,7 @@
                 closeDropdown();
             });
             document.getElementById('logoutOption').addEventListener('click', () => {
-                handleLogout(false);
-                closeDropdown();
-            });
-            document.getElementById('logoutAllOption').addEventListener('click', () => {
-                if (confirm('Are you sure you want to logout from all accounts?')) {
-                    handleLogout(true);
-                }
+                handleLogout();
                 closeDropdown();
             });
             // Close dropdown when pressing ESC
