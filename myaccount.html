@@ -759,17 +759,17 @@
         </nav>
         <div class="account-switcher">
             <div class="switcher-button" id="switcherButton">
-                <div class="avatar" id="currentAvatar">A</div>
-                <span class="account-name" id="currentName">Adrian</span>
+                <div class="avatar" id="currentAvatar">G</div>
+                <span class="account-name" id="currentName">Guest</span>
                 <span class="dropdown-icon"></span>
             </div>
             <div class="dropdown-menu" id="dropdownMenu">
                 <div class="current-account">
                     <div class="current-account-info">
-                        <div class="current-avatar" id="currentAccountAvatar">A</div>
+                        <div class="current-avatar" id="currentAccountAvatar">G</div>
                         <div class="current-account-details">
-                            <div class="current-account-name" id="currentAccountName">Adrian</div>
-                            <div class="current-account-email" id="currentAccountEmail">adrian@example.com</div>
+                            <div class="current-account-name" id="currentAccountName">Guest</div>
+                            <div class="current-account-email" id="currentAccountEmail">guest@example.com</div>
                         </div>
                     </div>
                 </div>
@@ -783,7 +783,11 @@
                 </div>
                 <div class="logout-option" id="logoutOption">
                     <div class="logout-icon"></div>
-                    <span class="logout-text">Logout</span>
+                    <span class="logout-text">Logout Current Account</span>
+                </div>
+                <div class="logout-option" id="logoutAllOption" style="border-top: 1px solid #f0f0f0;">
+                    <div class="logout-icon"></div>
+                    <span class="logout-text">Logout All Accounts</span>
                 </div>
             </div>
         </div>
@@ -902,12 +906,12 @@
                 <!-- Orders Section -->
                 <section id="orders" class="content-section">
                     <h1 class="section-title">Order History</h1>
-                    <p style="opacity: 0.8; margin-bottom: 1.5rem;">Your recent purchases from the shop will appear here.</p>
+                    <p style="opacity: 0.8; margin-bottom: 1.5rem;">Order history from checkout-payment for all your accounts will be displayed here.</p>
                     
                     <div class="order-item">
                         <div class="order-info">
                             <h4>No Recent Orders</h4>
-                            <p>Check back after making a purchase in the shop.</p>
+                            <p>Check back after completing a purchase through checkout-payment with any of your accounts.</p>
                         </div>
                         <div class="order-status status-pending">N/A</div>
                     </div>
@@ -1125,7 +1129,7 @@
         }
 
         // Account Switcher functionality
-        let activeAccount = { id: 1, name: 'User', email: 'user@example.com', avatar: 'U', color: '#ff6b6b' };
+        let activeAccount = { id: 0, name: 'Guest', email: 'guest@example.com', avatar: 'G', color: '#ff6b6b' };
         let accountsList = JSON.parse(localStorage.getItem('accountsList')) || [];
 
         function updateActiveAccount(name, email) {
@@ -1275,13 +1279,60 @@
         }
 
         // Handle logout
-        function handleLogout() {
+        function handleLogout(logoutAll = false) {
             userAccount.isAuthenticated = false;
             userAccount.sessionToken = '';
+            if (logoutAll) {
+                accountsList = [];
+                localStorage.setItem('accountsList', JSON.stringify(accountsList));
+                activeAccount = { id: 0, name: 'Guest', email: 'guest@example.com', avatar: 'G', color: '#ff6b6b' };
+                // Update button
+                document.getElementById('currentAvatar').textContent = activeAccount.avatar;
+                document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
+                document.getElementById('currentName').textContent = activeAccount.name;
+                // Update current account display in dropdown
+                document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
+                document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
+                document.getElementById('currentAccountName').textContent = activeAccount.name;
+                document.getElementById('currentAccountEmail').textContent = activeAccount.email;
+                // Update account list
+                renderAccountList();
+                // Update profile display
+                document.getElementById('profileName').textContent = activeAccount.name;
+                document.getElementById('profileEmail').textContent = activeAccount.email;
+                document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
+                alert('You have been logged out from all accounts successfully.');
+            } else {
+                // Remove the current account from the list if it exists
+                accountsList = accountsList.filter(acc => acc.id !== activeAccount.id);
+                localStorage.setItem('accountsList', JSON.stringify(accountsList));
+                if (accountsList.length > 0) {
+                    // Switch to the first available account
+                    switchToAccount(accountsList[0]);
+                    alert(`You have been logged out from ${activeAccount.name}'s account. Switched to another account.`);
+                } else {
+                    activeAccount = { id: 0, name: 'Guest', email: 'guest@example.com', avatar: 'G', color: '#ff6b6b' };
+                    // Update button
+                    document.getElementById('currentAvatar').textContent = activeAccount.avatar;
+                    document.getElementById('currentAvatar').style.backgroundColor = activeAccount.color;
+                    document.getElementById('currentName').textContent = activeAccount.name;
+                    // Update current account display in dropdown
+                    document.getElementById('currentAccountAvatar').textContent = activeAccount.avatar;
+                    document.getElementById('currentAccountAvatar').style.backgroundColor = activeAccount.color;
+                    document.getElementById('currentAccountName').textContent = activeAccount.name;
+                    document.getElementById('currentAccountEmail').textContent = activeAccount.email;
+                    // Update account list
+                    renderAccountList();
+                    // Update profile display
+                    document.getElementById('profileName').textContent = activeAccount.name;
+                    document.getElementById('profileEmail').textContent = activeAccount.email;
+                    document.querySelector('.profile-avatar').textContent = activeAccount.avatar;
+                    alert(`You have been logged out from ${activeAccount.name}'s account.`);
+                }
+            }
             localStorage.setItem('userAccount', JSON.stringify(userAccount));
             checkConnection();
             updateMenuVisibility();
-            alert('You have been logged out successfully.');
             window.location.href = 'index.html';
         }
 
@@ -1364,7 +1415,13 @@
                 closeDropdown();
             });
             document.getElementById('logoutOption').addEventListener('click', () => {
-                handleLogout();
+                handleLogout(false);
+                closeDropdown();
+            });
+            document.getElementById('logoutAllOption').addEventListener('click', () => {
+                if (confirm('Are you sure you want to logout from all accounts?')) {
+                    handleLogout(true);
+                }
                 closeDropdown();
             });
             // Close dropdown when pressing ESC
